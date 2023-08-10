@@ -24,7 +24,28 @@ class userController {
                     .status(200)
                     .json({ status: "err", message: "The password is equal" });
             }
-            const result = await userService.createUser(req.body);
+            const result = await userService.create(req.body);
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Khong tim thay trang",
+            });
+        }
+    }
+
+    // [PUT] /user/:id
+    async updateUser(req, res, next) {
+        try {
+            const userId = req.params.id;
+            const data = req.body;
+            if (!userId) {
+                return res.status(200).json({
+                    status: "OK",
+                    message: "User id is required",
+                });
+            }
+            const result = await userService.update(userId, data);
+
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({

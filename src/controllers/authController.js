@@ -17,6 +17,7 @@ class authController {
                     .json({ status: "err", message: "The input is email" });
             }
             const result = await authService.login(req.body);
+
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({

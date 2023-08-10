@@ -16,16 +16,21 @@ const login = (userData) => {
                     message: "The user is not exist",
                 });
             }
+
+            // Check password vs password in DB
             const comparePassword = bcrypt.compareSync(
                 password,
                 checkUser.password
             );
+
             if (!comparePassword) {
                 resolve({
                     status: "OK",
                     message: "Email or password is incorrect",
                 });
             }
+
+            // generate access token vs refresh token
             const access_token = generalAccessToken({
                 id: checkUser._id,
                 isAdmin: checkUser.isAdmin,
@@ -35,6 +40,8 @@ const login = (userData) => {
                 id: checkUser._id,
                 isAdmin: checkUser.isAdmin,
             });
+
+            // return json
             resolve({
                 status: "OK",
                 message: "SUCCESS",

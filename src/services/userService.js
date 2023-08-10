@@ -1,7 +1,7 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 
-const createUser = (userData) => {
+const create = (userData) => {
     return new Promise(async (resolve, reject) => {
         const { name, email, password, confirmPassword, phone } = userData;
         try {
@@ -35,6 +35,31 @@ const createUser = (userData) => {
     });
 };
 
+const update = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user
+            const checkUser = await User.findById(id);
+            if (!checkUser) {
+                resolve({
+                    status: "OK",
+                    message: "User is not exist",
+                });
+            }
+            const updatedUser = await User.findByIdAndUpdate(id, data, {
+                new: true,
+            });
+            resolve({
+                status: "OK",
+                message: "SUCCESS",
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 module.exports = {
-    createUser,
+    create,
+    update,
 };
