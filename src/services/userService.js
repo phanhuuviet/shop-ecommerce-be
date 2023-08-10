@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const bcrypt = require("bcrypt");
 
 const createUser = (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -14,13 +15,13 @@ const createUser = (userData) => {
                     message: "The email is already",
                 });
             }
+            const hash = bcrypt.hashSync(password, 1);
 
             // Create user
             const createUser = await User.create({
                 name,
                 email,
-                password,
-                confirmPassword,
+                password: hash,
                 phone,
             });
             resolve({

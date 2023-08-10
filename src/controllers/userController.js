@@ -1,10 +1,11 @@
-const userService = require("../services/userService");
+const userService = require("../services/UserService");
 
 class userController {
     index(req, res, next) {
         res.send("hello");
     }
 
+    // [POST] /sign-up
     async createUser(req, res, next) {
         try {
             const { name, email, password, confirmPassword, phone } = req.body;
