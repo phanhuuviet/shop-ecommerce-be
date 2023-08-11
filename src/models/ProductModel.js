@@ -8,10 +8,11 @@ const productSchema = new mongoose.Schema(
         price: { type: Number, required: true },
         countInStock: { type: Number, required: true },
         rating: { type: Number, required: true },
-        description: { type: String, required: true },
+        description: { type: String },
     },
     {
         timestamps: true,
+        collection: "Product",
     }
 );
 const Product = mongoose.model("Product", productSchema);

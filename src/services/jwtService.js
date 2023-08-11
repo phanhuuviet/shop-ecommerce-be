@@ -28,7 +28,6 @@ const refreshToken = (token) => {
                         message: "Authentication fail",
                     });
                 }
-                console.log(data);
                 const access_token = generalAccessToken({
                     id: data.id,
                     isAdmin: data.isAdmin,
