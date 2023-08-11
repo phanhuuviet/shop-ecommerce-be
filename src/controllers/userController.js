@@ -1,8 +1,37 @@
 const userService = require("../services/UserService");
 
 class userController {
-    index(req, res, next) {
-        res.send("hello");
+    // [GET] /user
+    async index(req, res, next) {
+        try {
+            const result = await userService.getAll();
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Khong tim thay trang",
+            });
+        }
+    }
+
+    // [GET] /user/:id
+    async getAnUser(req, res, next) {
+        try {
+            const userId = req.params.id;
+            if (!userId) {
+                return res.status(200).json({
+                    status: "OK",
+                    message: "User id is required",
+                });
+            }
+            const result = await userService.getUser(userId);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Khong tim thay trang",
+            });
+        }
     }
 
     // [POST] /sign-up
@@ -45,6 +74,26 @@ class userController {
                 });
             }
             const result = await userService.update(userId, data);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Khong tim thay trang",
+            });
+        }
+    }
+
+    // [DELETE] /user/:id
+    async deleteUser(req, res, next) {
+        try {
+            const userId = req.params.id;
+            if (!userId) {
+                return res.status(200).json({
+                    status: "OK",
+                    message: "User id is required",
+                });
+            }
+            const result = await userService.deleteUser(userId);
 
             res.status(200).json(result);
         } catch (error) {
