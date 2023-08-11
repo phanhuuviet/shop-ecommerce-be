@@ -1,4 +1,5 @@
 const userService = require("../services/UserService");
+const jwtService = require("../services/jwtService");
 
 class userController {
     // [GET] /user
@@ -25,6 +26,26 @@ class userController {
                 });
             }
             const result = await userService.getUser(userId);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Khong tim thay trang",
+            });
+        }
+    }
+
+    // [GET] /user/refresh-token
+    async refreshToken(req, res, next) {
+        try {
+            const token = req.headers.token.split(" ")[1];
+            if (!token) {
+                return res.status(200).json({
+                    status: "OK",
+                    message: "User token is required",
+                });
+            }
+            const result = await jwtService.refreshToken(token);
 
             res.status(200).json(result);
         } catch (error) {
