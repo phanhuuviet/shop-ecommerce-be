@@ -15,6 +15,17 @@ const productSchema = new mongoose.Schema(
         collection: "Product",
     }
 );
+
+// Query helper
+productSchema.query.sortable = function (sort) {
+    if (sort) {
+        const objectSort = {};
+        objectSort[sort[1]] = sort[0];
+        this.sort(objectSort);
+    }
+    return this;
+};
+
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;

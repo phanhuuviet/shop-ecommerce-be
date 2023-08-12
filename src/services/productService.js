@@ -2,25 +2,32 @@ const Product = require("../models/ProductModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const getAll = (limit = 2, page = 0) => {
+const getAll = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
-        try {
-            const totalProduct = await Product.count();
-            // Find all product
-            const products = await Product.find({})
-                .limit(limit)
-                .skip(page * limit);
-            resolve({
-                status: "OK",
-                message: "SUCCESS",
-                data: products,
-                total: totalProduct,
-                currentPage: page + 1,
-                totalPage: Math.ceil(totalProduct / limit),
-            });
-        } catch (err) {
-            reject(err);
+        const totalProduct = await Product.count();
+        // check if filter exist then finding
+        const products = Product.find({
+            ...(filter && { [filter[0]]: { $regex: filter[1] } }),
+        })
+            .limit(limit)
+            .skip(page * limit);
+        if (sort) {
+            products.sortable(sort);
         }
+        products
+            .then((product) => {
+                resolve({
+                    status: "OK",
+                    message: "SUCCESS",
+                    data: product,
+                    total: totalProduct,
+                    currentPage: page + 1,
+                    totalPage: Math.ceil(totalProduct / limit),
+                });
+            })
+            .catch((err) => {
+                reject(err);
+            });
     });
 };
 

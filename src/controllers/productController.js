@@ -4,10 +4,12 @@ class productController {
     // [GET] /product
     async index(req, res, next) {
         try {
-            const { limit, page } = req.query;
+            const { limit, page, sort, filter } = req.query;
             const result = await productService.getAll(
-                parseInt(limit),
-                parseInt(page)
+                parseInt(limit) || 8,
+                parseInt(page) || 0,
+                sort,
+                filter
             );
 
             res.status(200).json(result);
