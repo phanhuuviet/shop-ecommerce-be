@@ -21,7 +21,9 @@ class authController {
 
             res.cookie("refresh_token", refresh_token, {
                 HttpOnly: true,
-                Secure: true,
+                Secure: false,
+                samesite: "strict",
+                path: "/",
             });
             res.status(200).json(newResponse);
         } catch (error) {
