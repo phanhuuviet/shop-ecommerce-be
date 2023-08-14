@@ -17,8 +17,13 @@ class authController {
                     .json({ status: "err", message: "The input is email" });
             }
             const result = await authService.login(req.body);
+            const { refresh_token, ...newResponse } = result;
 
-            res.status(200).json(result);
+            res.cookie("refresh_token", refresh_token, {
+                HttpOnly: true,
+                Secure: true,
+            });
+            res.status(200).json(newResponse);
         } catch (error) {
             return res.status(404).json({
                 message: "Khong tim thay trang",

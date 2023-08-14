@@ -12,7 +12,7 @@ const login = (userData) => {
             });
             if (!checkUser) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "The user is not exist",
                 });
             }

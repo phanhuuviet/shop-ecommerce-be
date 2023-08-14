@@ -25,11 +25,10 @@ const getUser = (id) => {
             const checkUser = await User.findById(id);
             if (!checkUser) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "User is not exist",
                 });
             }
-            console.log(123);
             // Find an user
             const user = await User.findOne({ _id: id });
             resolve({
@@ -53,7 +52,7 @@ const create = (userData) => {
             });
             if (checkUser) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "The email is already",
                 });
             }
@@ -84,7 +83,7 @@ const update = (id, data) => {
             const checkUser = await User.findById(id);
             if (!checkUser) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "User is not exist",
                 });
             }
@@ -111,7 +110,7 @@ const deleteUser = (id) => {
             const checkUser = await User.findById(id);
             if (!checkUser) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "User is not exist",
                 });
             }

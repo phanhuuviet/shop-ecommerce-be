@@ -27,7 +27,7 @@ const authUserMiddleware = (req, res, next) => {
         const idUser = req.params.id;
 
         const data = jwt.verify(token, process.env.ACCESS_TOKEN);
-        if (data.isAdmin && data.id === idUser) {
+        if (data.isAdmin || data.id === idUser) {
             next();
         } else {
             return res.status(404).json({

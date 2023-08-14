@@ -71,8 +71,6 @@ const create = (data) => {
 const update = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(123);
-
             // Find user and check user exist
             const checkProduct = await Product.findById(id);
             if (!checkProduct) {
