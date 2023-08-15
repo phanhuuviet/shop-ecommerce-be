@@ -10,7 +10,7 @@ class userController {
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }
@@ -30,7 +30,7 @@ class userController {
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }
@@ -50,7 +50,7 @@ class userController {
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }
@@ -78,7 +78,7 @@ class userController {
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }
@@ -99,7 +99,7 @@ class userController {
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }
@@ -119,7 +119,7 @@ class userController {
             res.status(200).json(result);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }

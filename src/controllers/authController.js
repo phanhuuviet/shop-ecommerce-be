@@ -14,7 +14,7 @@ class authController {
             } else if (!isCheckEmail) {
                 return res
                     .status(200)
-                    .json({ status: "err", message: "The input is email" });
+                    .json({ status: "err", message: "This field is email" });
             }
             const result = await authService.login(req.body);
             const { refresh_token, ...newResponse } = result;

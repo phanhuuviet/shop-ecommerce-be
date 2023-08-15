@@ -9,7 +9,7 @@ const getAll = () => {
             const users = await User.find({});
             resolve({
                 status: "OK",
-                message: "SUCCESS",
+                message: "success",
                 data: users,
             });
         } catch (err) {
@@ -53,7 +53,7 @@ const create = (userData) => {
             if (checkUser) {
                 resolve({
                     status: "err",
-                    message: "The email is already",
+                    message: "Email already exists",
                 });
             }
             const hash = bcrypt.hashSync(password, 1);
@@ -67,7 +67,7 @@ const create = (userData) => {
             });
             resolve({
                 status: "OK",
-                message: "SUCCESS",
+                message: "successfully",
                 data: createUser,
             });
         } catch (err) {
@@ -94,7 +94,7 @@ const update = (id, data) => {
             });
             resolve({
                 status: "OK",
-                message: "SUCCESS",
+                message: "successfully",
                 data: updatedUser,
             });
         } catch (err) {
@@ -119,7 +119,7 @@ const deleteUser = (id) => {
             await User.findByIdAndDelete(id);
             resolve({
                 status: "OK",
-                message: "DELETE USER SUCCESS",
+                message: "Delete user success",
             });
         } catch (err) {
             reject(err);

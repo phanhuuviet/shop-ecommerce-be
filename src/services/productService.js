@@ -18,7 +18,7 @@ const getAll = (limit, page, sort, filter) => {
             .then((product) => {
                 resolve({
                     status: "OK",
-                    message: "SUCCESS",
+                    message: "successfully",
                     data: product,
                     total: totalProduct,
                     currentPage: page + 1,
@@ -43,7 +43,7 @@ const create = (data) => {
             if (checkProduct) {
                 resolve({
                     status: "OK",
-                    message: "The product is already",
+                    message: "Product already exists",
                 });
             }
 
@@ -59,7 +59,7 @@ const create = (data) => {
             });
             resolve({
                 status: "OK",
-                message: "SUCCESS",
+                message: "successfully",
                 data: createProduct,
             });
         } catch (err) {
@@ -86,7 +86,7 @@ const update = (id, data) => {
             });
             resolve({
                 status: "OK",
-                message: "SUCCESS",
+                message: "successfully",
                 data: updatedProduct,
             });
         } catch (err) {
@@ -110,7 +110,7 @@ const getAnProduct = (id) => {
             const product = await Product.findOne({ _id: id });
             resolve({
                 status: "OK",
-                message: "FIND PRODUCT SUCCESS",
+                message: "Find product success",
                 data: product,
             });
         } catch (err) {
@@ -135,7 +135,7 @@ const deleteProduct = (id) => {
             await Product.findByIdAndDelete(id);
             resolve({
                 status: "OK",
-                message: "DELETE PRODUCT SUCCESS",
+                message: "Delete pruduct success",
             });
         } catch (err) {
             reject(err);

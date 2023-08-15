@@ -44,7 +44,7 @@ const login = (userData) => {
             // return json
             resolve({
                 status: "OK",
-                message: "SUCCESS",
+                message: "successfully",
                 access_token,
                 refresh_token,
             });

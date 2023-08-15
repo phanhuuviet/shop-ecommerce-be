@@ -24,7 +24,7 @@ const refreshToken = (token) => {
             jwt.verify(token, process.env.REFRESH_TOKEN, function (err, data) {
                 if (err) {
                     resolve({
-                        status: "ERROR",
+                        status: "err",
                         message: "Authentication fail",
                     });
                 }
