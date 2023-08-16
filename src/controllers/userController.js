@@ -1,4 +1,4 @@
-const userService = require("../services/UserService");
+const userService = require("../services/userService");
 const jwtService = require("../services/jwtService");
 
 class userController {
@@ -72,7 +72,7 @@ class userController {
             } else if (password !== confirmPassword) {
                 return res
                     .status(200)
-                    .json({ status: "err", message: "The password is equal" });
+                    .json({ status: "err", message: "Password must be equal" });
             }
             const result = await userService.create(req.body);
             res.status(200).json(result);

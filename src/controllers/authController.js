@@ -28,7 +28,7 @@ class authController {
             res.status(200).json(newResponse);
         } catch (error) {
             return res.status(404).json({
-                message: "Khong tim thay trang",
+                message: "Page not found",
             });
         }
     }
