@@ -44,7 +44,8 @@ const getUser = (id) => {
 
 const create = (userData) => {
     return new Promise(async (resolve, reject) => {
-        const { name, email, password, confirmPassword, phone } = userData;
+        const { name, email, password, confirmPassword, phone, gender } =
+            userData;
         try {
             // Check exist user in database
             const checkUser = await User.findOne({
@@ -64,6 +65,7 @@ const create = (userData) => {
                 email,
                 password: hash,
                 phone,
+                gender,
             });
             resolve({
                 status: "OK",
