@@ -32,8 +32,6 @@ class productController {
                 rating,
                 description,
             } = req.body;
-            // const reg = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
-            // const isCheckEmail = reg.test(email);
             if (
                 !name ||
                 !image ||
@@ -46,6 +44,7 @@ class productController {
                     .status(200)
                     .json({ status: "err", message: "The input is required" });
             }
+
             const result = await productService.create(req.body);
             res.status(200).json(result);
         } catch (error) {

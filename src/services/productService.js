@@ -42,7 +42,7 @@ const create = (data) => {
             });
             if (checkProduct) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "Product already exists",
                 });
             }
@@ -71,7 +71,7 @@ const create = (data) => {
 const update = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Find user and check user exist
+            // Find product and check product exist
             const checkProduct = await Product.findById(id);
             if (!checkProduct) {
                 resolve({
