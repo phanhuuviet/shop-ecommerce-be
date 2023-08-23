@@ -129,10 +129,26 @@ const deleteUser = (id) => {
     });
 };
 
+const deleteMany = (ids) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find and delete
+            await User.deleteMany({ _id: ids });
+            resolve({
+                status: "OK",
+                message: "Delete user success",
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 module.exports = {
     getAll,
     getUser,
     create,
     update,
     deleteUser,
+    deleteMany,
 };

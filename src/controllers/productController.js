@@ -114,6 +114,26 @@ class productController {
             });
         }
     }
+
+    // [DELETE] /product/delete-many
+    async deleteManyProduct(req, res, next) {
+        try {
+            const ids = req.body._id;
+            if (!ids) {
+                return res.status(200).json({
+                    status: "err",
+                    message: "Product ids is required",
+                });
+            }
+            const result = await productService.deleteMany(ids);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        }
+    }
 }
 
 module.exports = new productController();

@@ -4,9 +4,14 @@ const { authMiddleware } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.get("/:id", productController.getAnProduct);
+router.get("/", productController.index);
 router.post("/create", productController.createProduct);
+router.post(
+    "/delete-many",
+    authMiddleware,
+    productController.deleteManyProduct
+);
 router.put("/:id", authMiddleware, productController.updateProduct);
 router.delete("/:id", authMiddleware, productController.deleteProduct);
-router.get("/", productController.index);
 
 module.exports = router;

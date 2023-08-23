@@ -123,6 +123,25 @@ class userController {
             });
         }
     }
+    // [DELETE] /user/delete-many
+    async deleteMany(req, res, next) {
+        try {
+            const userIds = req.body._id;
+            if (!userIds) {
+                return res.status(200).json({
+                    status: "OK",
+                    message: "User ids is required",
+                });
+            }
+            const result = await userService.deleteMany(userIds);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        }
+    }
 }
 
 module.exports = new userController();
