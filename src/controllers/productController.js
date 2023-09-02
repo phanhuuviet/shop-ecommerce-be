@@ -20,6 +20,19 @@ class productController {
         }
     }
 
+    // [GET] /product/get-all-type
+    async getAllType(req, res, next) {
+        try {
+            const allType = await productService.getAllType();
+
+            res.status(200).json(allType);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        }
+    }
+
     // [POST] /product/create
     async createProduct(req, res, next) {
         try {

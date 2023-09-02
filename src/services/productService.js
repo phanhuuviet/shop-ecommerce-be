@@ -31,6 +31,23 @@ const getAll = (limit, page, sort, filter) => {
     });
 };
 
+const getAllType = () => {
+    return new Promise(async (resolve, reject) => {
+        const products = Product.distinct("type");
+        products
+            .then((types) => {
+                resolve({
+                    status: "OK",
+                    message: "successfully",
+                    data: types,
+                });
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
 const create = (data) => {
     return new Promise(async (resolve, reject) => {
         const { name, image, type, price, countInStock, rating, description } =
@@ -161,6 +178,7 @@ const deleteMany = (ids) => {
 module.exports = {
     getAll,
     getAnProduct,
+    getAllType,
     create,
     update,
     deleteProduct,

@@ -25,7 +25,7 @@ const login = (userData) => {
 
             if (!comparePassword) {
                 resolve({
-                    status: "OK",
+                    status: "err",
                     message: "Email or password is incorrect",
                 });
             }
