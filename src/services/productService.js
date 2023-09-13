@@ -4,16 +4,18 @@ const jwt = require("jsonwebtoken");
 
 const getAll = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
-        const totalProduct = await Product.count();
         // check if filter exist then finding
         const products = Product.find({
             ...(filter && { [filter[0]]: { $regex: filter[1] } }),
-        })
-            .limit(limit)
-            .skip(page * limit);
+        });
+        const totalProduct = await products.clone().count();
+        if (limit) {
+            products.limit(limit).skip(page * limit);
+        }
         if (sort) {
             products.sortable(sort);
         }
+
         products
             .then((product) => {
                 resolve({
