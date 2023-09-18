@@ -1,7 +1,22 @@
 const orderService = require("../services/orderService");
 
 class orderController {
-    // [POST] /create/:id
+    // [GET] /order/:id
+    async getAnOrder(req, res, next) {
+        const orderId = req.params?.id;
+
+        if (!orderId) {
+            res.status(200).json({
+                status: "err",
+                message: "Order id is required",
+            });
+        } else {
+            const response = await orderService.getAnOrder(orderId);
+            res.status(200).json(response);
+        }
+    }
+
+    // [POST] /order/create
     async createOrder(req, res, next) {
         const {
             fullName,

@@ -72,7 +72,7 @@ const create = (data) => {
                 image,
                 type,
                 price,
-                countInStock,
+                countInStock: Number(countInStock),
                 rating,
                 description,
             });

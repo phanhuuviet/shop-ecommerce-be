@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const Order = require("../models/OrderProductModel");
 
 const getAll = () => {
     return new Promise(async (resolve, reject) => {
@@ -35,6 +36,30 @@ const getUser = (id) => {
                 status: "OK",
                 message: "FIND USER SUCCESS",
                 data: user,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const getAllOrder = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkUser = await User.findById(id);
+            if (!checkUser) {
+                resolve({
+                    status: "err",
+                    message: "User is not exist",
+                });
+            }
+            // Find an user
+            const orders = await Order.find({ user: id });
+            resolve({
+                status: "OK",
+                message: "FIND ORDER SUCCESS",
+                data: orders,
             });
         } catch (err) {
             reject(err);
@@ -147,6 +172,7 @@ const deleteMany = (ids) => {
 module.exports = {
     getAll,
     getUser,
+    getAllOrder,
     create,
     update,
     deleteUser,

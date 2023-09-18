@@ -15,6 +15,26 @@ class userController {
         }
     }
 
+    // [GET] /user/order
+    async getAllOrder(req, res, next) {
+        try {
+            const userId = req.headers?.userid;
+            if (!userId) {
+                return res.status(200).json({
+                    status: "OK",
+                    message: "User id is required",
+                });
+            }
+            const result = await userService.getAllOrder(userId);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        }
+    }
+
     // [GET] /user/:id
     async getAnUser(req, res, next) {
         try {

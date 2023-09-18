@@ -24,9 +24,10 @@ const authMiddleware = (req, res, next) => {
 const authUserMiddleware = (req, res, next) => {
     try {
         const token = req.headers?.token.split(" ")[1];
-        const idUser = req.params.id;
+        const idUser = req.headers?.userid || req.params.id;
 
         const data = jwt.verify(token, process.env.ACCESS_TOKEN);
+
         if (data.isAdmin || data.id === idUser) {
             next();
         } else {

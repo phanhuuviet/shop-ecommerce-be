@@ -7,6 +7,7 @@ const {
     authUserMiddleware,
 } = require("../middlewares/authMiddleware");
 
+router.get("/order", authUserMiddleware, userController.getAllOrder);
 router.get("/:id", authUserMiddleware, userController.getAnUser);
 router.get("/", authMiddleware, userController.index);
 router.post("/refresh-token", userController.refreshToken);
