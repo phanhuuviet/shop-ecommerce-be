@@ -47,6 +47,8 @@ const createOrder = (newOrder) => {
                 shippingPrice,
                 totalPrice,
                 data,
+                isPaid,
+                paidAt,
             } = newOrder;
             try {
                 // Create order
@@ -63,6 +65,8 @@ const createOrder = (newOrder) => {
                     totalPrice,
                     taxPrice: 0.05,
                     user: userId,
+                    isPaid,
+                    paidAt,
                 });
 
                 await updateStockAfterOrder(data);
@@ -107,7 +111,30 @@ const getAnOrder = (orderId) => {
     });
 };
 
+const cancelOrder = (orderId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await Order.deleteOne({ _id: orderId });
+            if (data) {
+                resolve({
+                    status: "OK",
+                    message: "successfully",
+                    data: data,
+                });
+            } else {
+                resolve({
+                    status: "err",
+                    message: "Order is not exist",
+                });
+            }
+        } catch (error) {
+            reject(err);
+        }
+    });
+};
+
 module.exports = {
     createOrder,
     getAnOrder,
+    cancelOrder,
 };
