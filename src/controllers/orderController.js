@@ -45,6 +45,21 @@ class orderController {
         const response = await orderService.createOrder(req.body);
         res.status(200).json(response);
     }
+
+    // [DELETE] /order/:id
+    async cancelOrder(req, res, next) {
+        const orderId = req.params?.id;
+
+        if (!orderId) {
+            res.status(200).json({
+                status: "err",
+                message: "Order id is required",
+            });
+        } else {
+            const response = await orderService.cancelOrder(orderId);
+            res.status(200).json(response);
+        }
+    }
 }
 
 module.exports = new orderController();
