@@ -29,13 +29,24 @@ app.use(bodyParser.text({ limit: "200mb" }));
 routes(app);
 
 mongoose
-    .connect("mongodb://localhost:27017/shop-ecommerce")
+    .connect(
+        `mongodb+srv://phanhuuviet1:Phanviet2002@shop-ecommerce.m0qawbh.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`
+    )
     .then(() => {
-        console.log("Connected to database");
+        console.log("connect success");
     })
     .catch((err) => {
         console.log(err);
     });
+
+// mongoose
+//     .connect("mongodb://localhost:27017/shop-ecommerce")
+//     .then(() => {
+//         console.log("Connected to database");
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

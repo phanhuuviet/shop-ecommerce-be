@@ -4,12 +4,13 @@ const {
     authMiddleware,
     authenticateToken,
 } = require("../middlewares/authMiddleware");
+const { imageMiddleware } = require("../middlewares/imageMiddleware");
 const router = express.Router();
 
 router.get("/get-all-type", productController.getAllType);
 router.get("/:id", productController.getAnProduct);
 router.get("/", productController.index);
-router.post("/create", productController.createProduct);
+router.post("/create", imageMiddleware, productController.createProduct);
 router.post(
     "/delete-many",
     authMiddleware,
