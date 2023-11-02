@@ -113,7 +113,7 @@ class productController {
         try {
             const productId = req.params.id;
             if (!productId) {
-                return res.status(200).json({
+                return res.status(304).json({
                     status: "OK",
                     message: "Product id is required",
                 });
@@ -133,12 +133,56 @@ class productController {
         try {
             const ids = req.body._id;
             if (!ids) {
-                return res.status(200).json({
+                return res.status(304).json({
                     status: "err",
                     message: "Product ids is required",
                 });
             }
             const result = await productService.deleteMany(ids);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        }
+    }
+    async favoriteProduct(req, res, next) {
+        try {
+            const id = req.params.id; // id product
+            const { userId } = req;
+
+            if (!id) {
+                return res.status(304).json({
+                    status: "err",
+                    message: "Product id is required",
+                });
+            }
+            const result = await productService.favoriteProduct({ id, userId });
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(404).json({
+                message: "Page not found",
+            });
+        }
+    }
+
+    async unFavoriteProduct(req, res, next) {
+        try {
+            const id = req.params.id;
+            const { userId } = req;
+
+            if (!id) {
+                return res.status(304).json({
+                    status: "err",
+                    message: "Product id is required",
+                });
+            }
+            const result = await productService.unFavoriteProduct({
+                id,
+                userId,
+            });
 
             res.status(200).json(result);
         } catch (error) {

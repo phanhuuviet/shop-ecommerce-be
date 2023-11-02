@@ -1,4 +1,5 @@
 const Product = require("../models/ProductModel");
+const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -162,6 +163,115 @@ const deleteProduct = (id) => {
     });
 };
 
+const favoriteProduct = ({ id, userId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find product and check product exist
+            const checkProduct = await Product.findById(id);
+            if (!checkProduct) {
+                resolve({
+                    status: "err",
+                    message: "Product is not exist",
+                });
+            }
+
+            const checkUser = await User.findById(userId);
+            if (!checkUser) {
+                resolve({
+                    status: "err",
+                    message: "User is not exist",
+                });
+            }
+
+            // Find and update
+            const result = await Product.findByIdAndUpdate(
+                {
+                    _id: id,
+                },
+                {
+                    $inc: {
+                        favorites: 1,
+                    },
+                },
+                {
+                    new: true,
+                }
+            );
+            if (checkUser.favoriteProduct.includes(id)) {
+                resolve({
+                    status: "err",
+                    message: "Product is already exist in favorite list!",
+                });
+            } else {
+                checkUser.favoriteProduct.push(id);
+                await checkUser.save();
+            }
+            resolve({
+                status: "OK",
+                message: "Favorite product success",
+                data: result,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const unFavoriteProduct = ({ id, userId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find product and check product exist
+            const checkProduct = await Product.findById(id);
+            if (!checkProduct) {
+                resolve({
+                    status: "err",
+                    message: "Product is not exist",
+                });
+            }
+
+            const checkUser = await User.findById(userId);
+            if (!checkUser) {
+                resolve({
+                    status: "err",
+                    message: "User is not exist",
+                });
+            }
+
+            // Find and update
+            const result = await Product.findOneAndUpdate(
+                {
+                    _id: id,
+                },
+                {
+                    $inc: {
+                        favorites: -1,
+                    },
+                },
+                {
+                    new: true,
+                }
+            );
+            if (checkUser.favoriteProduct.includes(id)) {
+                const index = checkUser.favoriteProduct.indexOf(id);
+                checkUser.favoriteProduct.splice(index);
+                await checkUser.save();
+            } else {
+                resolve({
+                    status: "err",
+                    message: "Product is not exist in favorite list!",
+                });
+            }
+            resolve({
+                status: "OK",
+                message: "Un favorite product success",
+                data: result,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 const deleteMany = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -185,4 +295,6 @@ module.exports = {
     update,
     deleteProduct,
     deleteMany,
+    favoriteProduct,
+    unFavoriteProduct,
 };

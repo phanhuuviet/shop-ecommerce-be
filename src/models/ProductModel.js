@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema(
         rating: { type: Number, required: true },
         description: { type: String },
         sold: { type: Number, default: 0 },
+        favorites: { type: Number, default: 0 },
     },
     {
         timestamps: true,

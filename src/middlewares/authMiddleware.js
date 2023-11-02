@@ -44,7 +44,22 @@ const authUserMiddleware = (req, res, next) => {
     }
 };
 
+const authenticateToken = (req, res, next) => {
+    try {
+        const token = req.headers?.authorization.split(" ")[1];
+        const data = jwt.verify(token, process.env.ACCESS_TOKEN);
+        req.userId = data?.id;
+        next();
+    } catch (error) {
+        return res.status(404).json({
+            message: "Authentication fail",
+            status: "ERROR",
+        });
+    }
+};
+
 module.exports = {
     authMiddleware,
     authUserMiddleware,
+    authenticateToken,
 };
