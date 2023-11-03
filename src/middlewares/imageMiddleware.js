@@ -11,19 +11,23 @@ cloudinary.config({
 const imageMiddleware = async (req, res, next) => {
     const image = req.body?.image ? req.body?.image : req.body?.avatar;
     try {
-        await cloudinary.uploader
-            .upload(image)
-            .then((result) => {
-                const { secure_url } = result;
-                req.body.image = secure_url;
-                next();
-            })
-            .catch((err) => {
-                return res.status(500).json({
-                    message: "Internal server error",
-                    status: "ERROR",
+        if (image) {
+            await cloudinary.uploader
+                .upload(image)
+                .then((result) => {
+                    const { secure_url } = result;
+                    req.body.image = secure_url;
+                    next();
+                })
+                .catch((err) => {
+                    return res.status(500).json({
+                        message: "Internal server error",
+                        status: "ERROR",
+                    });
                 });
-            });
+        } else {
+            next();
+        }
     } catch (error) {
         return res.status(500).json({
             message: "Internal server error",
