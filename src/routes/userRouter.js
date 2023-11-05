@@ -9,7 +9,8 @@ const {
 const { imageMiddleware } = require("../middlewares/imageMiddleware");
 
 router.get("/order", authUserMiddleware, userController.getAllOrder);
-router.get("/:id", authUserMiddleware, userController.getAnUser);
+router.get("/:id", userController.getAnUser);
+// router.get("/:id", authUserMiddleware, userController.getAnUser);
 router.get("/", authMiddleware, userController.index);
 router.post("/refresh-token", userController.refreshToken);
 router.post("/sign-up", userController.createUser);
