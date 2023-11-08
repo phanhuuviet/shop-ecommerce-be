@@ -5,8 +5,11 @@ const routes = require("./routes");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const io = require("./socket/index");
+const http = require("http");
 
 const app = express();
+const server = http.createServer(app);
 const port = process.env.PORT || 3001;
 
 app.use(cors());
@@ -25,6 +28,7 @@ app.use(
     })
 );
 app.use(bodyParser.text({ limit: "200mb" }));
+io.attach(server);
 
 routes(app);
 
@@ -48,6 +52,6 @@ mongoose
 //         console.log(err);
 //     });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
