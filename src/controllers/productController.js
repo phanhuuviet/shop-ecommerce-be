@@ -14,8 +14,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -27,8 +27,8 @@ class productController {
 
             res.status(200).json(allType);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -61,8 +61,8 @@ class productController {
             const result = await productService.create(req.body);
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -82,8 +82,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -102,8 +102,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -113,7 +113,7 @@ class productController {
         try {
             const productId = req.params.id;
             if (!productId) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "OK",
                     message: "Product id is required",
                 });
@@ -122,8 +122,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -133,7 +133,7 @@ class productController {
         try {
             const ids = req.body._id;
             if (!ids) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "Product ids is required",
                 });
@@ -142,8 +142,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -153,7 +153,7 @@ class productController {
             const { userId } = req;
 
             if (!id) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "Product id is required",
                 });
@@ -162,8 +162,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }
@@ -174,7 +174,7 @@ class productController {
             const { userId } = req;
 
             if (!id) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "Product id is required",
                 });
@@ -186,8 +186,8 @@ class productController {
 
             res.status(200).json(result);
         } catch (error) {
-            return res.status(404).json({
-                message: "Page not found",
+            return res.status(500).json({
+                message: "Internal server error",
             });
         }
     }

@@ -6,7 +6,7 @@ class chatController {
             const senderId = req.body.senderId;
             const receiverId = req.body.receiverId;
             if (!senderId || !receiverId) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "SenderId and receiverId is required",
                 });
@@ -28,7 +28,7 @@ class chatController {
         try {
             const userId = req.params.userId;
             if (!userId) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "UserId is required",
                 });
@@ -50,7 +50,7 @@ class chatController {
             const firstId = req.params.firstId;
             const secondId = req.params.secondId;
             if (!firstId || !secondId) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "FirstId and SecondId is required",
                 });

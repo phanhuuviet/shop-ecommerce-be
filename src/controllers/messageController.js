@@ -5,7 +5,7 @@ class messageController {
         try {
             const { chatId, senderId, text } = req.body;
             if (!chatId || !senderId || !text) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "ChatId and senderId and text is required",
                 });
@@ -28,7 +28,7 @@ class messageController {
         try {
             const { chatId } = req.params;
             if (!chatId) {
-                return res.status(304).json({
+                return res.status(400).json({
                     status: "err",
                     message: "ChatId is required",
                 });
