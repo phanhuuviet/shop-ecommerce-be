@@ -30,7 +30,7 @@ const refreshToken = (token) => {
                 }
                 const access_token = generalAccessToken({
                     id: data?.id,
-                    isAdmin: data?.isAdmin,
+                    role: data?.role,
                 });
                 resolve({
                     status: "OK",

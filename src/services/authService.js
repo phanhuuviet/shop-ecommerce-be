@@ -33,12 +33,12 @@ const login = (userData) => {
             // generate access token vs refresh token
             const access_token = generalAccessToken({
                 id: checkUser._id,
-                isAdmin: checkUser.isAdmin,
+                role: checkUser.role,
             });
 
             const refresh_token = generalRefreshToken({
                 id: checkUser._id,
-                isAdmin: checkUser.isAdmin,
+                role: checkUser.role,
             });
 
             // return json

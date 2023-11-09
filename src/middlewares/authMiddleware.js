@@ -1,20 +1,21 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
+const { ROLE_ADMIN } = require("../constants/role");
 
 const authMiddleware = (req, res, next) => {
     try {
-        const token = req.headers?.token.split(" ")[1];
+        const token = req.headers?.authorization.split(" ")[1];
         const data = jwt.verify(token, process.env.ACCESS_TOKEN);
-        if (data?.isAdmin) {
+        if (data?.role === ROLE_ADMIN) {
             next();
         } else {
-            return res.status(404).json({
+            return res.status(401).json({
                 message: "Authentication fail",
                 status: "ERROR",
             });
         }
     } catch (error) {
-        return res.status(404).json({
+        return res.status(401).json({
             message: "Authentication fail",
             status: "ERROR",
         });
@@ -23,21 +24,21 @@ const authMiddleware = (req, res, next) => {
 
 const authUserMiddleware = (req, res, next) => {
     try {
-        const token = req.headers?.token.split(" ")[1];
+        const token = req.headers?.authorization.split(" ")[1];
         const idUser = req.headers?.userid || req.params.id;
 
         const data = jwt.verify(token, process.env.ACCESS_TOKEN);
 
-        if (data.isAdmin || data.id === idUser) {
+        if (data.role === ROLE_ADMIN || data.id === idUser) {
             next();
         } else {
-            return res.status(404).json({
+            return res.status(401).json({
                 message: "Authentication fail",
                 status: "ERROR",
             });
         }
     } catch (error) {
-        return res.status(404).json({
+        return res.status(401).json({
             message: "Authentication fail",
             status: "ERROR",
         });
@@ -51,7 +52,28 @@ const authenticateToken = (req, res, next) => {
         req.userId = data?.id;
         next();
     } catch (error) {
-        return res.status(404).json({
+        return res.status(401).json({
+            message: "Authentication fail",
+            status: "ERROR",
+        });
+    }
+};
+
+const checkIsAdminOrIsSeller = (req, res, next) => {
+    try {
+        const token = req.headers?.authorization.split(" ")[1];
+        const data = jwt.verify(token, process.env.ACCESS_TOKEN);
+        if (data?.role === ROLE_ADMIN || data?.role === ROLE_SELLER) {
+            req.userId = data?.id;
+            next();
+        } else {
+            return res.status(401).json({
+                message: "Authentication fail",
+                status: "ERROR",
+            });
+        }
+    } catch (error) {
+        return res.status(401).json({
             message: "Authentication fail",
             status: "ERROR",
         });
@@ -62,4 +84,5 @@ module.exports = {
     authMiddleware,
     authUserMiddleware,
     authenticateToken,
+    checkIsAdminOrIsSeller,
 };
