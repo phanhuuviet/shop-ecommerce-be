@@ -1,7 +1,8 @@
 const User = require("../models/UserModel");
+const Order = require("../models/OrderProductModel");
+const Product = require("../models/ProductModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Order = require("../models/OrderProductModel");
 
 const getAll = () => {
     return new Promise(async (resolve, reject) => {
@@ -60,6 +61,30 @@ const getAllOrder = (id) => {
                 status: "OK",
                 message: "FIND ORDER SUCCESS",
                 data: orders,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const getProduct = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkUser = await User.findById(userId);
+            if (!checkUser) {
+                resolve({
+                    status: "err",
+                    message: "User is not exist",
+                });
+            }
+            // Find all product of an user
+            const products = await Product.find({ userId: userId });
+            resolve({
+                status: "OK",
+                message: "FIND PRODUCT SUCCESS",
+                data: products,
             });
         } catch (err) {
             reject(err);
@@ -173,6 +198,7 @@ module.exports = {
     getAll,
     getUser,
     getAllOrder,
+    getProduct,
     create,
     update,
     deleteUser,

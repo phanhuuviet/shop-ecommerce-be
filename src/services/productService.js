@@ -53,8 +53,16 @@ const getAllType = () => {
 
 const create = (data) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, price, countInStock, rating, description } =
-            data;
+        const {
+            name,
+            image,
+            type,
+            price,
+            countInStock,
+            rating,
+            description,
+            userId,
+        } = data;
         try {
             // Check exist product in database
             const checkProduct = await Product.findOne({
@@ -66,8 +74,7 @@ const create = (data) => {
                     message: "Product already exists",
                 });
             }
-
-            // Create user
+            // Create product
             const createProduct = await Product.create({
                 name,
                 image,
@@ -76,6 +83,7 @@ const create = (data) => {
                 countInStock: Number(countInStock),
                 rating,
                 description,
+                userId,
             });
             resolve({
                 status: "OK",

@@ -3,6 +3,7 @@ const productController = require("../controllers/productController");
 const {
     authMiddleware,
     authenticateToken,
+    checkIsAdminOrIsSeller,
 } = require("../middlewares/authMiddleware");
 const { imageMiddleware } = require("../middlewares/imageMiddleware");
 const router = express.Router();
@@ -10,7 +11,12 @@ const router = express.Router();
 router.get("/get-all-type", productController.getAllType);
 router.get("/:id", productController.getAnProduct);
 router.get("/", productController.index);
-router.post("/create", imageMiddleware, productController.createProduct);
+router.post(
+    "/create",
+    checkIsAdminOrIsSeller,
+    imageMiddleware,
+    productController.createProduct
+);
 router.post(
     "/delete-many",
     authMiddleware,
@@ -26,7 +32,7 @@ router.post(
     authenticateToken,
     productController.unFavoriteProduct
 );
-router.put("/:id", authMiddleware, productController.updateProduct);
-router.delete("/:id", authMiddleware, productController.deleteProduct);
+router.put("/:id", checkIsAdminOrIsSeller, productController.updateProduct);
+router.delete("/:id", checkIsAdminOrIsSeller, productController.deleteProduct);
 
 module.exports = router;

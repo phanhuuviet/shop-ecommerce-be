@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
-const { ROLE_ADMIN } = require("../constants/role");
+const { ROLE_ADMIN, ROLE_SELLER } = require("../constants/role");
 
 const authMiddleware = (req, res, next) => {
     try {

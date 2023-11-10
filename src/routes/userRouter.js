@@ -5,10 +5,12 @@ const userController = require("../controllers/userController");
 const {
     authMiddleware,
     authUserMiddleware,
+    checkIsAdminOrIsSeller,
 } = require("../middlewares/authMiddleware");
 const { imageMiddleware } = require("../middlewares/imageMiddleware");
 
 router.get("/order", authUserMiddleware, userController.getAllOrder);
+router.get("/product", checkIsAdminOrIsSeller, userController.getProduct);
 router.get("/:id", userController.getAnUser);
 // router.get("/:id", authUserMiddleware, userController.getAnUser);
 router.get("/", authMiddleware, userController.index);

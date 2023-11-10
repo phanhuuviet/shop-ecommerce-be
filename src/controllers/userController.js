@@ -76,7 +76,23 @@ class userController {
     }
 
     // [GET] /user/product
-    async getProduct(req, res, next) {}
+    async getProduct(req, res, next) {
+        try {
+            const userId = req?.userId;
+            if (!userId) {
+                return res.status(400).json({
+                    message: "User id is required",
+                });
+            }
+
+            const result = await userService.getProduct(userId);
+            return res.status(200).json(result);
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
 
     // [POST] /sign-up
     async createUser(req, res, next) {

@@ -36,29 +36,23 @@ class productController {
     // [POST] /product/create
     async createProduct(req, res, next) {
         try {
-            const {
-                name,
-                image,
-                type,
-                price,
-                countInStock,
-                rating,
-                description,
-            } = req.body;
+            const { name, image, type, price, countInStock, rating } = req.body;
+            const userId = req?.userId;
             if (
                 !name ||
                 !image ||
                 !type ||
                 !price ||
                 !countInStock ||
-                !rating
+                !rating ||
+                !userId
             ) {
-                return res
-                    .status(200)
-                    .json({ status: "err", message: "The input is required" });
+                return res.status(400).json({
+                    status: "err",
+                    message: "You need to fill all field required",
+                });
             }
-
-            const result = await productService.create(req.body);
+            const result = await productService.create({ ...req.body, userId });
             res.status(200).json(result);
         } catch (error) {
             return res.status(500).json({

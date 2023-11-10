@@ -11,6 +11,10 @@ const productSchema = new mongoose.Schema(
         description: { type: String },
         sold: { type: Number, default: 0 },
         favorites: { type: Number, default: 0 },
+        userId: {
+            type: String,
+            required: true,
+        },
     },
     {
         timestamps: true,
