@@ -17,6 +17,7 @@ const imageMiddleware = async (req, res, next) => {
                 .then((result) => {
                     const { secure_url } = result;
                     req.body.image = secure_url;
+                    req.body.avatar = secure_url;
                     next();
                 })
                 .catch((err) => {

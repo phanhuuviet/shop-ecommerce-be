@@ -4,11 +4,13 @@ const Product = require("../models/ProductModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const getAll = () => {
+const getAll = (keyword) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Find all user
-            const users = await User.find({});
+            const users = await User.find({
+                name: { $regex: new RegExp(keyword, "i") },
+            });
             resolve({
                 status: "OK",
                 message: "success",
@@ -91,6 +93,8 @@ const getProduct = (userId) => {
         }
     });
 };
+
+// const addToCart = ()
 
 const create = (userData) => {
     return new Promise(async (resolve, reject) => {

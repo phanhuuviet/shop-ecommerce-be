@@ -3,12 +3,23 @@ const Chat = require("../models/ChatModel");
 const createChat = ({ senderId, receiverId }) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const checkChat = await Chat.findOne({
+                members: [senderId, receiverId],
+            });
+            if (checkChat) {
+                resolve({
+                    status: "OK",
+                    message: "successfully",
+                    data: checkChat,
+                });
+                return;
+            }
             const newChat = await Chat.create({
                 members: [senderId, receiverId],
             });
             resolve({
                 status: "OK",
-                message: "successfully",
+                message: "create successfully",
                 data: newChat,
             });
         } catch (err) {

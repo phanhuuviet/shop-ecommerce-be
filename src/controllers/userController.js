@@ -5,7 +5,8 @@ class userController {
     // [GET] /user
     async index(req, res, next) {
         try {
-            const result = await userService.getAll();
+            const { name } = req?.query;
+            const result = await userService.getAll(name);
 
             res.status(200).json(result);
         } catch (error) {
@@ -86,6 +87,25 @@ class userController {
             }
 
             const result = await userService.getProduct(userId);
+            return res.status(200).json(result);
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
+
+    // [POST] /user/cart
+    async addToCart(req, res, next) {
+        try {
+            const userId = req?.userId;
+            if (!userId) {
+                return res.status(400).json({
+                    message: "User id is required",
+                });
+            }
+
+            const result = await userService.addToCart(userId);
             return res.status(200).json(result);
         } catch (error) {
             return res.status(500).json({
