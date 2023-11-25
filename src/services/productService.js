@@ -18,6 +18,7 @@ const getAll = (limit, page, sort, filter) => {
         }
 
         products
+            .populate("user")
             .then((product) => {
                 resolve({
                     status: "OK",
@@ -135,7 +136,7 @@ const getAnProduct = (id) => {
                 });
             }
             // Find an product
-            const product = await Product.findOne({ _id: id });
+            const product = await Product.findOne({ _id: id }).populate("user");
             resolve({
                 status: "OK",
                 message: "Find product success",
@@ -181,16 +182,16 @@ const favoriteProduct = ({ id, userId }) => {
                     status: "err",
                     message: "Product is not exist",
                 });
+                return;
             }
-
             const checkUser = await User.findById(userId);
             if (!checkUser) {
                 resolve({
                     status: "err",
                     message: "User is not exist",
                 });
+                return;
             }
-
             // Find and update
             const result = await Product.findByIdAndUpdate(
                 {
@@ -210,6 +211,7 @@ const favoriteProduct = ({ id, userId }) => {
                     status: "err",
                     message: "Product is already exist in favorite list!",
                 });
+                return;
             } else {
                 checkUser.favoriteProduct.push(id);
                 await checkUser.save();
