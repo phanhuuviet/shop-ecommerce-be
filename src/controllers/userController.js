@@ -56,7 +56,7 @@ class userController {
         }
     }
 
-    // [GET] /user/refresh-token
+    // [POST] /user/refresh-token
     async refreshToken(req, res, next) {
         try {
             const token = req.cookies.refresh_token;

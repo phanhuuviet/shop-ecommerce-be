@@ -28,6 +28,7 @@ app.use(
     })
 );
 app.use(bodyParser.text({ limit: "200mb" }));
+app.use(cookieParser());
 io.attach(server);
 
 routes(app);
