@@ -9,6 +9,7 @@ const { imageMiddleware } = require("../middlewares/imageMiddleware");
 const router = express.Router();
 
 router.get("/get-all-type", productController.getAllType);
+router.get("/top", productController.getTopProduct);
 router.get("/:id", productController.getAnProduct);
 router.get("/", productController.index);
 router.post(

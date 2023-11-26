@@ -33,6 +33,19 @@ class productController {
         }
     }
 
+    // [GET] /product/top
+    async getTopProduct(req, res, next) {
+        try {
+            const topProduct = await productService.getTopProduct();
+
+            res.status(200).json(topProduct);
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
+
     // [POST] /product/create
     async createProduct(req, res, next) {
         try {

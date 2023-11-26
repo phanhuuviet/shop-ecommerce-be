@@ -52,6 +52,23 @@ const getAllType = () => {
     });
 };
 
+const getTopProduct = () => {
+    return new Promise(async (resolve, reject) => {
+        const products = Product.find().sort({ sold: "desc" }).limit(12);
+        products
+            .then((types) => {
+                resolve({
+                    status: "OK",
+                    message: "successfully",
+                    data: types,
+                });
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
 const create = (data) => {
     return new Promise(async (resolve, reject) => {
         const {
@@ -301,6 +318,7 @@ module.exports = {
     getAll,
     getAnProduct,
     getAllType,
+    getTopProduct,
     create,
     update,
     deleteProduct,
