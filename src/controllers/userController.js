@@ -36,6 +36,25 @@ class userController {
         }
     }
 
+    // [GET] /user/me
+    async getMe(req, res, next) {
+        try {
+            const userId = req.userId;
+            if (!userId) {
+                return res.status(401).json({
+                    message: "User id is required",
+                });
+            }
+            const result = await userService.getMe(userId);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
+
     // [GET] /user/:id
     async getAnUser(req, res, next) {
         try {

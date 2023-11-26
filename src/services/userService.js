@@ -46,6 +46,29 @@ const getUser = (id) => {
     });
 };
 
+const getMe = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkUser = await User.findById(id);
+            if (!checkUser) {
+                resolve({
+                    status: "err",
+                    message: "User is not exist",
+                });
+            }
+
+            resolve({
+                status: "OK",
+                message: "FIND USER SUCCESS",
+                data: checkUser,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 const getAllOrder = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -203,6 +226,7 @@ module.exports = {
     getUser,
     getAllOrder,
     getProduct,
+    getMe,
     create,
     update,
     deleteUser,

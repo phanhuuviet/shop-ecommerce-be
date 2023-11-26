@@ -13,6 +13,7 @@ const { imageMiddleware } = require("../middlewares/imageMiddleware");
 // [GET]
 router.get("/order", authUserMiddleware, userController.getAllOrder);
 router.get("/product", checkIsAdminOrIsSeller, userController.getProduct);
+router.get("/me", authenticateToken, userController.getMe);
 router.get("/:id", userController.getAnUser);
 // router.get("/:id", authUserMiddleware, userController.getAnUser);
 router.get("/", userController.index);
