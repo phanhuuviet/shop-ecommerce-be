@@ -117,8 +117,6 @@ const getProduct = (userId) => {
     });
 };
 
-// const addToCart = ()
-
 const create = (userData) => {
     return new Promise(async (resolve, reject) => {
         const { name, email, password, confirmPassword, phone, gender } =

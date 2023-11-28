@@ -33,7 +33,7 @@ router.post(
     authenticateToken,
     productController.unFavoriteProduct
 );
-router.put("/:id", checkIsAdminOrIsSeller, productController.updateProduct);
-router.delete("/:id", checkIsAdminOrIsSeller, productController.deleteProduct);
+router.put("/:id", productController.updateProduct);
+router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

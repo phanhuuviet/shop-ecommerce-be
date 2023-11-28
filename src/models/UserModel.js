@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema(
         phone: { type: String, required: true },
         gender: { type: String },
         address: { type: String },
+        dateOfBirth: { type: Date },
         avatar: { type: String },
+        background: { type: String },
         favoriteProduct: [
             {
                 type: mongoose.Schema.Types.ObjectId,
