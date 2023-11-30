@@ -93,16 +93,25 @@ const create = (data) => {
                 });
             }
             // Create product
-            const createProduct = await Product.create({
-                name,
-                image,
-                type,
-                price,
-                countInStock: Number(countInStock),
-                rating,
-                description,
-                userId,
-            });
+            const [createProduct, _] = await Promise.all([
+                Product.create({
+                    name,
+                    image,
+                    type,
+                    price,
+                    countInStock: Number(countInStock),
+                    rating,
+                    description,
+                    user: userId,
+                }),
+                User.findByIdAndUpdate(
+                    userId,
+                    {
+                        $inc: { totalProduct: 1 },
+                    },
+                    { new: true }
+                ),
+            ]);
             resolve({
                 status: "OK",
                 message: "successfully",

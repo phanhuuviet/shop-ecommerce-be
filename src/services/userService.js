@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const Order = require("../models/OrderProductModel");
 const Product = require("../models/ProductModel");
+const Cart = require("../models/CartModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -46,6 +47,37 @@ const getUser = (id) => {
     });
 };
 
+const getShop = ({ shopId, userId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find shop and check shop exist
+            const [shop, products] = await Promise.all([
+                User.findById(shopId),
+                Product.find({ user: shopId }),
+            ]);
+            if (!shop) {
+                resolve({
+                    status: "err",
+                    message: "Shop is not exist",
+                });
+                return;
+            }
+            const isFollowing = shop.followers.includes(userId);
+            resolve({
+                status: "OK",
+                message: "FIND SHOP SUCCESS",
+                data: {
+                    ...shop.toObject(), // Convert Mongoose document to plain object
+                    isFollowing,
+                    products: products,
+                },
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 const getMe = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -62,6 +94,23 @@ const getMe = (id) => {
                 status: "OK",
                 message: "FIND USER SUCCESS",
                 data: checkUser,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const getCart = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const carts = await Cart.find({ userId: id });
+
+            resolve({
+                status: "OK",
+                message: "FIND CART SUCCESS",
+                data: carts,
             });
         } catch (err) {
             reject(err);
@@ -105,11 +154,33 @@ const getProduct = (userId) => {
                 });
             }
             // Find all product of an user
-            const products = await Product.find({ userId: userId });
+            const products = await Product.find({ user: userId });
             resolve({
                 status: "OK",
                 message: "FIND PRODUCT SUCCESS",
                 data: products,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const getFollowingShop = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkUser = await User.findById(userId).populate("following");
+            if (!checkUser) {
+                resolve({
+                    status: "err",
+                    message: "User is not exist",
+                });
+            }
+            resolve({
+                status: "OK",
+                message: "FIND FOLLOWING SHOP SUCCESS",
+                data: checkUser.following,
             });
         } catch (err) {
             reject(err);
@@ -153,6 +224,68 @@ const create = (userData) => {
     });
 };
 
+const followShop = ({ userId, shopId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkShop = await User.findById(shopId);
+            if (!checkShop) {
+                resolve({
+                    status: "err",
+                    message: "Shop is not exist",
+                });
+            }
+
+            // Find and update
+            await Promise.all([
+                User.findByIdAndUpdate(userId, {
+                    $addToSet: { following: shopId },
+                }),
+                User.findByIdAndUpdate(shopId, {
+                    $addToSet: { followers: userId },
+                }),
+            ]);
+            resolve({
+                status: "OK",
+                message: "Following successfully",
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const unFollowShop = ({ userId, shopId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkShop = await User.findById(shopId);
+            if (!checkShop) {
+                resolve({
+                    status: "err",
+                    message: "Shop is not exist",
+                });
+            }
+
+            // Find and update
+            await Promise.all([
+                User.findByIdAndUpdate(userId, {
+                    $pull: { following: shopId },
+                }),
+                User.findByIdAndUpdate(shopId, {
+                    $pull: { followers: userId },
+                }),
+            ]);
+            resolve({
+                status: "OK",
+                message: "Unfollow successfully",
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 const update = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -173,6 +306,75 @@ const update = (id, data) => {
                 status: "OK",
                 message: "successfully",
                 data: updatedUser,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const addToCart = (cartData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkCart = await Cart.find({
+                userId: cartData.userId,
+                productId: cartData.productId,
+            });
+            let res;
+            if (checkCart.length === 0) {
+                res = await Cart.create(cartData);
+            } else {
+                res = await Cart.findOneAndUpdate(
+                    {
+                        userId: cartData.userId,
+                        productId: cartData.productId,
+                    },
+                    {
+                        $inc: {
+                            amount: cartData.amount,
+                        },
+                    },
+                    {
+                        new: true,
+                    }
+                );
+            }
+            resolve({
+                message: "Add to cart success!",
+                data: res,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const increaseAmountProductInCart = ({ cartId, amount }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find cart and check cart exist
+            const checkCart = await Cart.findById(cartId);
+            if (!checkCart) {
+                resolve({
+                    status: "err",
+                    message: "Cart is not exist",
+                });
+            }
+
+            const result = await Cart.findByIdAndUpdate(
+                cartId,
+                {
+                    amount: amount,
+                },
+                {
+                    new: true,
+                }
+            );
+            resolve({
+                status: "OK",
+                message: "Update cart success",
+                data: result,
             });
         } catch (err) {
             reject(err);
@@ -219,14 +421,46 @@ const deleteMany = (ids) => {
     });
 };
 
+const deleteCart = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find cart and check user exist
+            const checkCart = await Cart.findById(id);
+            if (!checkCart) {
+                resolve({
+                    status: "err",
+                    message: "Cart is not exist",
+                });
+            }
+
+            // Find and delete
+            await Cart.findByIdAndDelete(id);
+            resolve({
+                status: "OK",
+                message: "Delete cart success",
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 module.exports = {
     getAll,
     getUser,
     getAllOrder,
     getProduct,
     getMe,
+    getShop,
+    getCart,
+    getFollowingShop,
     create,
+    followShop,
+    unFollowShop,
+    addToCart,
     update,
+    increaseAmountProductInCart,
     deleteUser,
     deleteMany,
+    deleteCart,
 };

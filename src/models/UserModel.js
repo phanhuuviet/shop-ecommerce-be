@@ -8,16 +8,23 @@ const userSchema = new mongoose.Schema(
         phone: { type: String, required: true },
         gender: { type: String },
         address: { type: String },
-        dateOfBirth: { type: Date },
+        dateOfBirth: { type: Date, default: new Date("2000-01-01T00:00:00Z") },
         avatar: { type: String },
         background: { type: String },
-        favoriteProduct: [
+        totalProduct: { type: Number, default: 0 },
+        following: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
+                ref: "User",
             },
         ],
-        cart: [
+        followers: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        favoriteProduct: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Product",

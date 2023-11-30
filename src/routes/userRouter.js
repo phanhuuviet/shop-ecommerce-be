@@ -14,8 +14,10 @@ const { imageMiddleware } = require("../middlewares/imageMiddleware");
 router.get("/order", authUserMiddleware, userController.getAllOrder);
 router.get("/product", checkIsAdminOrIsSeller, userController.getProduct);
 router.get("/me", authenticateToken, userController.getMe);
+router.get("/cart", authenticateToken, userController.getCart);
+router.get("/following", authenticateToken, userController.getFollowingShop);
+router.get("/:id/shop", authenticateToken, userController.getShop);
 router.get("/:id", userController.getAnUser);
-// router.get("/:id", authUserMiddleware, userController.getAnUser);
 router.get("/", userController.index);
 
 // [POST]
@@ -23,11 +25,19 @@ router.post("/cart", authenticateToken, userController.addToCart);
 router.post("/refresh-token", userController.refreshToken);
 router.post("/sign-up", userController.createUser);
 router.post("/delete-many", authMiddleware, userController.deleteMany);
+router.post("/follow", authenticateToken, userController.followShop);
+router.post("/unFollow", authenticateToken, userController.unFollowShop);
 
 // [PUT]
 router.put("/:id", imageMiddleware, userController.updateUser);
+router.put(
+    "/cart/:id",
+    authenticateToken,
+    userController.increaseAmountProductInCart
+);
 
 // [DELETE]
+router.delete("/cart/:id", authenticateToken, userController.deleteCart);
 router.delete("/:id", authMiddleware, userController.deleteUser);
 
 module.exports = router;
