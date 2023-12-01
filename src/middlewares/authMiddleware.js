@@ -83,9 +83,27 @@ const checkIsAdminOrIsSeller = (req, res, next) => {
     }
 };
 
+const authenticateTokenIfHas = (req, res, next) => {
+    try {
+        const token = req.headers?.authorization;
+        if (token) {
+            token = token.split(" ")[1];
+            const data = jwt.verify(token, process.env.ACCESS_TOKEN);
+            req.userId = data?.id;
+        }
+        next();
+    } catch (error) {
+        return res.status(401).json({
+            message: "Authentication fail",
+            status: "ERROR",
+        });
+    }
+};
+
 module.exports = {
     authMiddleware,
     authUserMiddleware,
     authenticateToken,
     checkIsAdminOrIsSeller,
+    authenticateTokenIfHas,
 };

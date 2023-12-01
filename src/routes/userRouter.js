@@ -7,16 +7,17 @@ const {
     authUserMiddleware,
     checkIsAdminOrIsSeller,
     authenticateToken,
+    authenticateTokenIfHas,
 } = require("../middlewares/authMiddleware");
 const { imageMiddleware } = require("../middlewares/imageMiddleware");
 
 // [GET]
-router.get("/order", authUserMiddleware, userController.getAllOrder);
+router.get("/order", authenticateToken, userController.getAllOrder);
 router.get("/product", checkIsAdminOrIsSeller, userController.getProduct);
 router.get("/me", authenticateToken, userController.getMe);
 router.get("/cart", authenticateToken, userController.getCart);
 router.get("/following", authenticateToken, userController.getFollowingShop);
-router.get("/:id/shop", authenticateToken, userController.getShop);
+router.get("/:id/shop", authenticateTokenIfHas, userController.getShop);
 router.get("/:id", userController.getAnUser);
 router.get("/", userController.index);
 
