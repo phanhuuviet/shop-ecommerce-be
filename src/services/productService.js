@@ -2,6 +2,7 @@ const Product = require("../models/ProductModel");
 const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const calculateRating = require("../utils/calculateRating");
 
 const getAll = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
@@ -66,6 +67,38 @@ const getTopProduct = () => {
             .catch((err) => {
                 reject(err);
             });
+    });
+};
+
+const rateProduct = ({ id, rating }) => {
+    return new Promise(async (resolve, reject) => {
+        const product = await Product.findById(id);
+        if (!product) {
+            resolve({
+                status: "err",
+                message: "Product is not exist",
+            });
+        }
+        const newRating = calculateRating({
+            rating: rating,
+            oldRating: product.rating,
+            reviewCount: product.reviewCount,
+        });
+        const result = await Product.findByIdAndUpdate(
+            id,
+            {
+                rating: newRating,
+                $inc: {
+                    reviewCount: 1,
+                },
+            },
+            { new: true }
+        );
+        resolve({
+            status: "OK",
+            message: "successfully",
+            data: result,
+        });
     });
 };
 
@@ -329,6 +362,7 @@ module.exports = {
     getAllType,
     getTopProduct,
     create,
+    rateProduct,
     update,
     deleteProduct,
     deleteMany,

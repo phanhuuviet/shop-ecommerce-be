@@ -20,7 +20,7 @@ class userController {
     // [GET] /user/order
     async getAllOrder(req, res, next) {
         try {
-            const userId = req.headers?.userid;
+            const userId = req.headers?.userid || req.userId;
             if (!userId) {
                 return res.status(400).json({
                     status: "OK",

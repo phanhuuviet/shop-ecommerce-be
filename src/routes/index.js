@@ -1,4 +1,4 @@
-const userRouter = require("./UserRouter");
+const userRouter = require("./userRouter");
 const siteRouter = require("./siteRouter");
 const loginRouter = require("./loginRouter");
 const signUpRouter = require("./signUpRouter");
@@ -7,6 +7,7 @@ const orderRouter = require("./orderRouter");
 const paymentRouter = require("./paymentRouter");
 const chatRouter = require("./chatRouter");
 const messageRouter = require("./messageRouter");
+const requestRouter = require("./requestRouter");
 
 const routes = (app) => {
     app.use("/sign-in", loginRouter);
@@ -17,6 +18,7 @@ const routes = (app) => {
     app.use("/payment", paymentRouter);
     app.use("/chat", chatRouter);
     app.use("/message", messageRouter);
+    app.use("/request", requestRouter);
     app.use("/", siteRouter);
 };
 

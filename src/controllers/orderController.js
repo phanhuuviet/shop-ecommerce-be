@@ -46,6 +46,22 @@ class orderController {
         res.status(200).json(response);
     }
 
+    // [PUT] /order/:id/paid
+    async paidOrder(req, res, next) {
+        const orderId = req.params?.id;
+        const userId = req.userId;
+
+        if (!orderId) {
+            res.status(200).json({
+                status: "err",
+                message: "Order id is required",
+            });
+        } else {
+            const response = await orderService.paidOrder({ orderId, userId });
+            res.status(200).json(response);
+        }
+    }
+
     // [DELETE] /order/:id
     async cancelOrder(req, res, next) {
         const orderId = req.params?.id;

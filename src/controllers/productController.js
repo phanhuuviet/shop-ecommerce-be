@@ -46,6 +46,29 @@ class productController {
         }
     }
 
+    // [POST] /product/:id/rate
+    async rateProduct(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { rating } = req.body;
+            if (!id) {
+                return res.status(400).json({
+                    message: "Product id is required!",
+                });
+            }
+            const result = await productService.rateProduct({
+                id,
+                rating: +rating,
+            });
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
+
     // [POST] /product/create
     async createProduct(req, res, next) {
         try {

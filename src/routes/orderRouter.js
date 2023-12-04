@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.get("/:id", orderController.getAnOrder);
 router.post("/create", authenticateToken, orderController.createOrder);
+router.put("/:id/paid", authenticateToken, orderController.paidOrder);
 router.delete("/:id", authUserMiddleware, orderController.cancelOrder);
 
 module.exports = router;

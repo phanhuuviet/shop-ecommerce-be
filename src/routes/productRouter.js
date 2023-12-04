@@ -8,10 +8,14 @@ const {
 const { imageMiddleware } = require("../middlewares/imageMiddleware");
 const router = express.Router();
 
+// [GET]
 router.get("/get-all-type", productController.getAllType);
 router.get("/top", productController.getTopProduct);
 router.get("/:id", productController.getAnProduct);
 router.get("/", productController.index);
+
+// [POST]
+router.post("/:id/rate", authenticateToken, productController.rateProduct);
 router.post(
     "/create",
     checkIsAdminOrIsSeller,
@@ -33,7 +37,11 @@ router.post(
     authenticateToken,
     productController.unFavoriteProduct
 );
+
+// [PUT]
 router.put("/:id", productController.updateProduct);
+
+// [DELETE]
 router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

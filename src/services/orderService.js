@@ -111,6 +111,36 @@ const getAnOrder = (orderId) => {
     });
 };
 
+const paidOrder = ({ orderId, userId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await Order.findOne({ _id: orderId, user: userId });
+            if (!data) {
+                resolve({
+                    status: "OK",
+                    message: "Order is not exist",
+                });
+            } else {
+                const res = await Order.findByIdAndUpdate(
+                    orderId,
+                    {
+                        isPaid: true,
+                        isDelivered: true,
+                    },
+                    { new: true }
+                );
+                resolve({
+                    status: "OK",
+                    message: "Paid for order success",
+                    data: res,
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 const cancelOrder = (orderId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -137,4 +167,5 @@ module.exports = {
     createOrder,
     getAnOrder,
     cancelOrder,
+    paidOrder,
 };
