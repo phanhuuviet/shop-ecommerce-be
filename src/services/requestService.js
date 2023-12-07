@@ -1,4 +1,5 @@
 const Request = require("../models/ContactModel");
+const User = require("../models/UserModel");
 
 const getAllRequestSeller = () => {
     return new Promise(async (resolve, reject) => {
@@ -71,17 +72,25 @@ const reportError = ({ userId, description }) => {
     });
 };
 
-const acceptToSeller = ({ id }) => {
+const acceptToSeller = ({ id, userId }) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const request = await Request.findByIdAndUpdate(
-                id,
-                {
-                    status: "Approved",
-                },
-                { new: true }
-            ).populate("userId");
-
+            const [request, userUpdated] = await Promise.all([
+                Request.findByIdAndUpdate(
+                    id,
+                    {
+                        status: "Approved",
+                    },
+                    { new: true }
+                ).populate("userId"),
+                User.findByIdAndUpdate(
+                    userId,
+                    {
+                        role: 2,
+                    },
+                    { new: true }
+                ),
+            ]);
             resolve({
                 status: "OK",
                 message: "successfully",

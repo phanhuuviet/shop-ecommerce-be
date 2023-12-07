@@ -75,6 +75,7 @@ class requestController {
     async acceptToSeller(req, res, next) {
         try {
             const { id } = req.params;
+            const { userId } = req.body;
             if (!id) {
                 return res.status(401).json({
                     status: "err",
@@ -83,6 +84,7 @@ class requestController {
             } else {
                 const response = await requestService.acceptToSeller({
                     id,
+                    userId,
                 });
                 return res.status(200).json(response);
             }
