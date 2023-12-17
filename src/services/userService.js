@@ -154,7 +154,9 @@ const getProduct = (userId) => {
                 });
             }
             // Find all product of an user
-            const products = await Product.find({ user: userId });
+            const products = await Product.find({ user: userId }).populate(
+                "user"
+            );
             resolve({
                 status: "OK",
                 message: "FIND PRODUCT SUCCESS",
