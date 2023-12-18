@@ -46,7 +46,7 @@ const login = (userData) => {
                 status: "OK",
                 message: "successfully",
                 access_token,
-                refresh_token,
+                refresh_tokens: refresh_token,
             });
         } catch (err) {
             reject(err);
