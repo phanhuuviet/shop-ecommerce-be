@@ -119,7 +119,7 @@ class userController {
     // [POST] /user/refresh-token
     async refreshToken(req, res, next) {
         try {
-            const token = req.cookies.refresh_token;
+            const token = req.body.refresh_token ?? req.cookies.refresh_token;
             if (!token) {
                 return res.status(400).json({
                     status: "OK",
