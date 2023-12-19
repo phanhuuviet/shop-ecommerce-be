@@ -196,19 +196,28 @@ const getAnProduct = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Find product and check product exist
-            const checkUser = await Product.findById(id);
-            if (!checkUser) {
-                resolve({
+            const checkProduct = await Product.findById(id);
+            if (!checkProduct) {
+                return resolve({
                     status: "OK",
                     message: "Product is not exist",
                 });
             }
             // Find an product
-            const product = await Product.findOne({ _id: id }).populate("user");
+            const [product, feedback] = await Promise.all([
+                await Product.findOne({ _id: id }).populate("user"),
+                await Feedback.find({ product: id }).populate("user"),
+            ]);
+            const result = {
+                ...product.toObject(),
+                feedback: feedback.map((feedbackData) =>
+                    feedbackData.toObject()
+                ),
+            };
             resolve({
                 status: "OK",
                 message: "Find product success",
-                data: product,
+                data: result,
             });
         } catch (err) {
             reject(err);
