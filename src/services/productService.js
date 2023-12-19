@@ -3,6 +3,7 @@ const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const calculateRating = require("../utils/calculateRating");
+const Feedback = require("../models/FeedbackModel");
 
 const getAll = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
@@ -70,34 +71,42 @@ const getTopProduct = () => {
     });
 };
 
-const rateProduct = ({ id, rating }) => {
+const rateProduct = ({ id, rating, userId, message }) => {
     return new Promise(async (resolve, reject) => {
         const product = await Product.findById(id);
         if (!product) {
-            resolve({
+            return resolve({
                 status: "err",
                 message: "Product is not exist",
             });
         }
         const newRating = calculateRating({
             rating: rating,
-            oldRating: product.rating,
-            reviewCount: product.reviewCount,
+            oldRating: product?.rating,
+            reviewCount: product?.reviewCount,
         });
-        const result = await Product.findByIdAndUpdate(
-            id,
-            {
-                rating: newRating,
-                $inc: {
-                    reviewCount: 1,
+        const [feedbackResult, productResult] = await Promise.all([
+            await Feedback.create({
+                product: id,
+                rating,
+                user: userId,
+                message,
+            }),
+            await Product.findByIdAndUpdate(
+                id,
+                {
+                    rating: newRating.toFixed(2),
+                    $inc: {
+                        reviewCount: 1,
+                    },
                 },
-            },
-            { new: true }
-        );
+                { new: true }
+            ),
+        ]);
         resolve({
             status: "OK",
             message: "successfully",
-            data: result,
+            data: productResult,
         });
     });
 };

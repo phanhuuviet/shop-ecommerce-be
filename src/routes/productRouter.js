@@ -15,7 +15,7 @@ router.get("/:id", productController.getAnProduct);
 router.get("/", productController.index);
 
 // [POST]
-router.post("/:id/rate", authenticateToken, productController.rateProduct);
+router.post("/:id/feedback", authenticateToken, productController.rateProduct);
 router.post(
     "/create",
     checkIsAdminOrIsSeller,

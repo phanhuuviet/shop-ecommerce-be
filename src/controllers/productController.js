@@ -46,19 +46,27 @@ class productController {
         }
     }
 
-    // [POST] /product/:id/rate
+    // [POST] /product/:id/feedback
     async rateProduct(req, res, next) {
         try {
+            // get product id
             const { id } = req.params;
-            const { rating } = req.body;
-            if (!id) {
+
+            // get user id
+            const userId = req.userId;
+
+            // get infomation
+            const { rating, message } = req.body;
+            if (!id || !userId || !message) {
                 return res.status(400).json({
-                    message: "Product id is required!",
+                    message: "Missing required field!",
                 });
             }
             const result = await productService.rateProduct({
                 id,
                 rating: +rating,
+                userId,
+                message,
             });
 
             res.status(200).json(result);
