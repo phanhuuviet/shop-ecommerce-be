@@ -1,6 +1,10 @@
 const userService = require("../services/userService");
 const jwtService = require("../services/jwtService");
 var mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
+const { generalAccessToken } = require("../services/jwtService");
 
 class userController {
     // [GET] /user
@@ -126,9 +130,22 @@ class userController {
                     message: "User token is required",
                 });
             }
-            const result = await jwtService.refreshToken(token);
 
-            res.status(200).json(result);
+            jwt.verify(token, process.env.REFRESH_TOKEN, function (err, data) {
+                if (err) {
+                    return res.status(401).json({
+                        message: "Authentication fail",
+                    });
+                }
+                const access_token = generalAccessToken({
+                    id: data?.id,
+                    role: data?.role,
+                });
+                return res.status(200).json({
+                    message: "REFRESH TOKEN SUCCESS",
+                    access_token,
+                });
+            });
         } catch (error) {
             return res.status(500).json({
                 message: "Internal server error",
