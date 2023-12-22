@@ -56,17 +56,18 @@ class productController {
             const userId = req.userId;
 
             // get infomation
-            const { rating, message } = req.body;
-            if (!id || !userId || !message) {
+            const { rating, message, orderId } = req.body;
+            if (!orderId || !userId || !message || !id) {
                 return res.status(400).json({
                     message: "Missing required field!",
                 });
             }
             const result = await productService.rateProduct({
-                id,
+                orderId,
                 rating: +rating,
                 userId,
                 message,
+                id,
             });
 
             res.status(200).json(result);

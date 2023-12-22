@@ -13,6 +13,10 @@ const orderSchema = new mongoose.Schema(
                     ref: "Product",
                     required: true,
                 },
+                isRating: {
+                    type: Boolean,
+                    default: false,
+                },
             },
         ],
         shippingAddress: {

@@ -1,5 +1,6 @@
 const Product = require("../models/ProductModel");
 const User = require("../models/UserModel");
+const Order = require("../models/OrderProductModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const calculateRating = require("../utils/calculateRating");
@@ -71,7 +72,7 @@ const getTopProduct = () => {
     });
 };
 
-const rateProduct = ({ id, rating, userId, message }) => {
+const rateProduct = ({ id, rating, userId, message, orderId }) => {
     return new Promise(async (resolve, reject) => {
         const product = await Product.findById(id);
         if (!product) {
@@ -85,19 +86,31 @@ const rateProduct = ({ id, rating, userId, message }) => {
             oldRating: product?.rating,
             reviewCount: product?.reviewCount,
         });
-        const [feedbackResult, productResult] = await Promise.all([
-            await Feedback.create({
+        const [_, productResult, orderResult] = await Promise.all([
+            Feedback.create({
                 product: id,
                 rating,
                 user: userId,
                 message,
             }),
-            await Product.findByIdAndUpdate(
+            Product.findByIdAndUpdate(
                 id,
                 {
                     rating: newRating.toFixed(2),
                     $inc: {
                         reviewCount: 1,
+                    },
+                },
+                { new: true }
+            ),
+            Order.findOneAndUpdate(
+                {
+                    _id: orderId,
+                    "orderItems.product": id,
+                },
+                {
+                    $set: {
+                        "orderItems.$.isRating": true,
                     },
                 },
                 { new: true }
