@@ -192,8 +192,15 @@ const getFollowingShop = (userId) => {
 
 const create = (userData) => {
     return new Promise(async (resolve, reject) => {
-        const { name, email, password, confirmPassword, phone, gender } =
-            userData;
+        const {
+            name,
+            email,
+            password,
+            confirmPassword,
+            phone,
+            gender,
+            address,
+        } = userData;
         try {
             // Check exist user in database
             const checkUser = await User.findOne({
@@ -214,6 +221,7 @@ const create = (userData) => {
                 password: hash,
                 phone,
                 gender,
+                address,
             });
             resolve({
                 status: "OK",

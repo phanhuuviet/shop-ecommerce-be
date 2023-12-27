@@ -39,7 +39,7 @@ router.post(
 );
 
 // [PUT]
-router.put("/:id", productController.updateProduct);
+router.put("/:id", imageMiddleware, productController.updateProduct);
 
 // [DELETE]
 router.delete("/:id", productController.deleteProduct);
