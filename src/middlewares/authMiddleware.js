@@ -53,6 +53,7 @@ const authenticateToken = (req, res, next) => {
         }
         const data = jwt.verify(token, process.env.ACCESS_TOKEN);
         req.userId = data?.id;
+        req.role = data?.role;
         next();
     } catch (error) {
         return res.status(401).json({

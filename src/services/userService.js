@@ -323,6 +323,52 @@ const update = (id, data) => {
     });
 };
 
+const changePasswordUser = (id, currentPassword, newPassword) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Find user and check user exist
+            const checkUser = await User.findById(id);
+            if (!checkUser) {
+                return resolve({
+                    status: 400,
+                    message: "User is not exist",
+                });
+            }
+            // Compare password of user vs current password
+            const isCurrentPasswordValid = await bcrypt.compare(
+                currentPassword,
+                checkUser.password
+            );
+            if (!isCurrentPasswordValid) {
+                return resolve({
+                    status: 401,
+                    message: "Current password is incorrect!",
+                });
+            }
+            // Encode new password
+            const newEncryptedPassword = await bcrypt.hash(newPassword, 10);
+
+            // Find and update
+            const updatedUser = await User.findByIdAndUpdate(
+                id,
+                {
+                    $set: { password: newEncryptedPassword },
+                },
+                {
+                    new: true,
+                }
+            );
+            resolve({
+                status: "OK",
+                message: "successfully",
+                data: updatedUser,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 const addToCart = (cartData) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -469,6 +515,7 @@ module.exports = {
     unFollowShop,
     addToCart,
     update,
+    changePasswordUser,
     increaseAmountProductInCart,
     deleteUser,
     deleteMany,

@@ -1,10 +1,14 @@
-const userService = require("../services/userService");
-const jwtService = require("../services/jwtService");
 var mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
+
+const userService = require("../services/userService");
+const jwtService = require("../services/jwtService");
+
 const { generalAccessToken } = require("../services/jwtService");
+const checkDisallowedFields = require("../utils/allowFieldUpdate");
+const { ROLE_ADMIN } = require("../constants/role");
 
 class userController {
     // [GET] /user
@@ -295,14 +299,48 @@ class userController {
     async updateUser(req, res, next) {
         try {
             const userId = req.params.id;
-            const data = req.body;
+            const role = req.role;
             if (!userId) {
                 return res.status(200).json({
                     status: "OK",
                     message: "User id is required",
                 });
             }
-            const result = await userService.update(userId, data);
+            if (
+                role !== ROLE_ADMIN &&
+                checkDisallowedFields(req.body).length > 0
+            ) {
+                return res.status(400).json({
+                    status: "OK",
+                    message: "Invalid update fields!",
+                });
+            }
+            const result = await userService.update(userId, req.body);
+
+            res.status(200).json(result);
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
+
+    // [PUT] /user/change-password
+    async changePasswordUser(req, res, next) {
+        try {
+            const { currentPassword, newPassword } = req.body;
+            const { userId } = req;
+            if (!currentPassword || !newPassword) {
+                return res.status(400).json({
+                    message: "Missing required field",
+                });
+            }
+
+            const result = await userService.changePasswordUser(
+                userId,
+                currentPassword,
+                newPassword
+            );
 
             res.status(200).json(result);
         } catch (error) {

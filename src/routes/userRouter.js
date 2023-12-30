@@ -30,11 +30,21 @@ router.post("/follow", authenticateToken, userController.followShop);
 router.post("/unFollow", authenticateToken, userController.unFollowShop);
 
 // [PUT]
-router.put("/:id", imageMiddleware, userController.updateUser);
+router.put(
+    "/change-password",
+    authenticateToken,
+    userController.changePasswordUser
+);
 router.put(
     "/cart/:id",
     authenticateToken,
     userController.increaseAmountProductInCart
+);
+router.put(
+    "/:id",
+    authenticateToken,
+    imageMiddleware,
+    userController.updateUser
 );
 
 // [DELETE]
