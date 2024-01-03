@@ -86,7 +86,7 @@ const checkIsAdminOrIsSeller = (req, res, next) => {
 
 const authenticateTokenIfHas = (req, res, next) => {
     try {
-        const token = req.headers?.authorization;
+        let token = req.headers?.authorization;
         if (token) {
             token = token.split(" ")[1];
             const data = jwt.verify(token, process.env.ACCESS_TOKEN);
