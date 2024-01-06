@@ -106,7 +106,7 @@ const getAnOrder = (orderId) => {
                 });
             }
         } catch (error) {
-            reject(err);
+            reject(error);
         }
     });
 };
@@ -144,21 +144,28 @@ const paidOrder = ({ orderId, userId }) => {
 const cancelOrder = (orderId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const data = await Order.deleteOne({ _id: orderId });
-            if (data) {
-                resolve({
-                    status: "OK",
-                    message: "successfully",
-                    data: data,
-                });
-            } else {
-                resolve({
-                    status: "err",
+            const data = await Order.findById(orderId);
+            if (!data) {
+                return resolve({
+                    statusCode: 404,
                     message: "Order is not exist",
                 });
             }
+            // loop through orderItems and plus back quantity to the product
+            data?.orderItems?.map(async (item) => {
+                await Product.findByIdAndUpdate(item?.product, {
+                    $inc: {
+                        countInStock: +item?.amount,
+                    },
+                });
+            });
+            Order.findByIdAndDelete(orderId);
+            return resolve({
+                statusCode: 200,
+                message: "Delete order successfully!",
+            });
         } catch (error) {
-            reject(err);
+            reject(error);
         }
     });
 };

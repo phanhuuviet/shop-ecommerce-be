@@ -130,7 +130,7 @@ const getAllOrder = (id) => {
                 });
             }
             // Find an user
-            const orders = await Order.find({ user: id });
+            const orders = (await Order.find({ user: id })).reverse();
             resolve({
                 status: "OK",
                 message: "FIND ORDER SUCCESS",
