@@ -1,6 +1,7 @@
-const Order = require("../models/OrderProductModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const Order = require("../models/OrderProductModel");
 const Product = require("../models/ProductModel");
 
 const createOrder = (newOrder) => {
@@ -156,10 +157,11 @@ const cancelOrder = (orderId) => {
                 await Product.findByIdAndUpdate(item?.product, {
                     $inc: {
                         countInStock: +item?.amount,
+                        sold: -item?.amount,
                     },
                 });
             });
-            Order.findByIdAndDelete(orderId);
+            await Order.findByIdAndDelete(orderId);
             return resolve({
                 statusCode: 200,
                 message: "Delete order successfully!",
