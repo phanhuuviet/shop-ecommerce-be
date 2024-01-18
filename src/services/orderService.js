@@ -3,9 +3,29 @@ const jwt = require("jsonwebtoken");
 
 const Order = require("../models/OrderProductModel");
 const Product = require("../models/ProductModel");
+const Cart = require("../models/CartModel");
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
+        const updateStockAfterOrder = (products) => {
+            products.map(async (product) => {
+                await Promise.all([
+                    Product.findOneAndUpdate(
+                        {
+                            _id: product.product,
+                        },
+                        {
+                            $inc: {
+                                countInStock: -product.amount,
+                                sold: +product.amount,
+                            },
+                        }
+                    ),
+                    Cart.findByIdAndDelete(product?.cartId),
+                ]);
+            });
+        };
+
         const stockStatus = await Promise.all(
             newOrder?.data.map(async (item) => {
                 const product = await Product.findById(item.product);
@@ -20,22 +40,6 @@ const createOrder = (newOrder) => {
         const insufficientStock = stockStatus.every(
             (item) => item.availableStock > item.orderedQuantity
         );
-
-        const updateStockAfterOrder = (products) => {
-            products.map(async (product) => {
-                await Product.findOneAndUpdate(
-                    {
-                        _id: product.product,
-                    },
-                    {
-                        $inc: {
-                            countInStock: -product.amount,
-                            sold: +product.amount,
-                        },
-                    }
-                );
-            });
-        };
 
         if (insufficientStock) {
             const {
