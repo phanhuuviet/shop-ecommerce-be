@@ -1,4 +1,5 @@
 const Chat = require("../models/ChatModel");
+const Message = require("../models/MessageModel");
 
 const createChat = ({ senderId, receiverId }) => {
     return new Promise(async (resolve, reject) => {
@@ -34,10 +35,26 @@ const userChats = ({ userId }) => {
             const chat = await Chat.find({
                 members: { $in: [userId] },
             });
+
+            const chatsWithLastMessage = await Promise.all(
+                chat?.map(async (chatItem) => {
+                    const lastMessage = await Message.findOne({
+                        chatId: chatItem._id,
+                    })
+                        .sort({ createdAt: -1 })
+                        .lean();
+
+                    return {
+                        ...chatItem.toObject(),
+                        lastMessage,
+                    };
+                })
+            );
+
             resolve({
                 status: "OK",
                 message: "successfully",
-                data: chat,
+                data: chatsWithLastMessage,
             });
         } catch (err) {
             reject(err);
