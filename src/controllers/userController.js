@@ -301,6 +301,8 @@ class userController {
         try {
             const userId = req.params.id;
             const role = req.role;
+            const { name, address, avatar, dateOfBirth, gender, phone } =
+                req.body;
             if (!userId) {
                 return res.status(200).json({
                     status: "OK",
@@ -309,7 +311,14 @@ class userController {
             }
             if (
                 role !== ROLE_ADMIN &&
-                checkDisallowedFields(req.body).length > 0
+                checkDisallowedFields({
+                    name,
+                    address,
+                    avatar,
+                    dateOfBirth,
+                    gender,
+                    phone,
+                }).length > 0
             ) {
                 return res.status(400).json({
                     status: "OK",
