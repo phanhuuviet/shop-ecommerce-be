@@ -251,7 +251,12 @@ const deleteProduct = (id) => {
             }
 
             // Find and delete
-            await Product.findByIdAndDelete(id);
+            await Promise.all([
+                Product.findByIdAndDelete(id),
+                User.findByIdAndUpdate(checkProduct.user, {
+                    $inc: { totalProduct: -1 },
+                }),
+            ]);
             resolve({
                 status: "OK",
                 message: "Delete pruduct success",

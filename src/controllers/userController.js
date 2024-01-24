@@ -199,8 +199,8 @@ class userController {
     async addToCart(req, res, next) {
         try {
             const { userId } = req;
-            const { name, amount, image, price, productId } = req.body;
-            if (!name || !amount || !image || !price || !productId) {
+            const { name, amount, image, price, productId, shopId } = req.body;
+            if (!name || !amount || !image || !price || !productId || !shopId) {
                 return res.status(400).json({
                     message: "You need to fill all require field!",
                 });
@@ -212,6 +212,7 @@ class userController {
                 image,
                 price: +price,
                 productId,
+                shopId,
             };
 
             const result = await userService.addToCart(cartData);

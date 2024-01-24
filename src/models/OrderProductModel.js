@@ -17,6 +17,10 @@ const orderSchema = new mongoose.Schema(
                     type: Boolean,
                     default: false,
                 },
+                cartId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Cart",
+                },
             },
         ],
         shippingAddress: {
@@ -29,6 +33,10 @@ const orderSchema = new mongoose.Schema(
         shippingPrice: { type: Number, required: true },
         taxPrice: { type: Number },
         totalPrice: { type: Number, required: true },
+        shopId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
