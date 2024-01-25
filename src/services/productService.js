@@ -10,7 +10,9 @@ const getAll = (limit, page, sort, filter) => {
     return new Promise(async (resolve, reject) => {
         // check if filter exist then finding
         const products = Product.find({
-            ...(filter && { [filter[0]]: { $regex: filter[1] } }),
+            ...(filter && {
+                [filter[0]]: { $regex: new RegExp(filter[1], "i") },
+            }),
         });
         const totalProduct = await products.clone().count();
         if (limit) {
