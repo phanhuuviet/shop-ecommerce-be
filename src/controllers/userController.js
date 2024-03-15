@@ -272,16 +272,23 @@ class userController {
     async createUser(req, res, next) {
         try {
             const { name, email, password, confirmPassword, phone } = req.body;
-            const reg = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
-            const isCheckEmail = reg.test(email);
+            // const reg = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+            // const isCheckEmail = reg.test(email);
             if (!name || !email || !password || !confirmPassword || !phone) {
                 return res
                     .status(200)
-                    .json({ status: "err", message: "The input is required" });
-            } else if (!isCheckEmail) {
-                return res
-                    .status(200)
-                    .json({ status: "err", message: "The input is email" });
+                    .json({ status: "err", message: "Input is required" });
+            } else if (
+                !String(email)
+                    .toLowerCase()
+                    .match(
+                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    )
+            ) {
+                return res.status(200).json({
+                    status: "err",
+                    message: "The username must be email",
+                });
             } else if (password !== confirmPassword) {
                 return res
                     .status(200)

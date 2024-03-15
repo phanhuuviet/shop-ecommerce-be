@@ -5,16 +5,21 @@ class authController {
     async login(req, res, next) {
         try {
             const { email, password } = req.body;
-            const reg = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
-            const isCheckEmail = reg.test(email);
             if (!email || !password) {
                 return res
                     .status(200)
                     .json({ status: "err", message: "The input is required" });
-            } else if (!isCheckEmail) {
-                return res
-                    .status(200)
-                    .json({ status: "err", message: "This field is email" });
+            } else if (
+                !String(email)
+                    .toLowerCase()
+                    .match(
+                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    )
+            ) {
+                return res.status(200).json({
+                    status: "err",
+                    message: "The username must be email!",
+                });
             }
             const result = await authService.login(req.body);
             const { refresh_token, ...newResponse } = result;
