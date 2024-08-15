@@ -31,7 +31,6 @@ class userController {
             const userId = req.headers?.userid || req.userId;
             if (!userId) {
                 return res.status(400).json({
-                    status: "OK",
                     message: "User id is required",
                 });
             }
@@ -89,7 +88,6 @@ class userController {
             const userId = req.params.id;
             if (!userId) {
                 return res.status(400).json({
-                    status: "OK",
                     message: "User id is required",
                 });
             }
@@ -110,7 +108,6 @@ class userController {
             const { userId } = req;
             if (!shopId) {
                 return res.status(400).json({
-                    status: "OK",
                     message: "Shop id is required",
                 });
             }
@@ -130,7 +127,6 @@ class userController {
             const token = req.body.refresh_token ?? req.cookies.refresh_token;
             if (!token) {
                 return res.status(400).json({
-                    status: "OK",
                     message: "User token is required",
                 });
             }
@@ -275,9 +271,7 @@ class userController {
             // const reg = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
             // const isCheckEmail = reg.test(email);
             if (!name || !email || !password || !confirmPassword || !phone) {
-                return res
-                    .status(200)
-                    .json({ status: "err", message: "Input is required" });
+                return res.status(400).json({ message: "Input is required" });
             } else if (
                 !String(email)
                     .toLowerCase()
@@ -285,14 +279,13 @@ class userController {
                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                     )
             ) {
-                return res.status(200).json({
-                    status: "err",
+                return res.status(400).json({
                     message: "The username must be email",
                 });
             } else if (password !== confirmPassword) {
                 return res
-                    .status(200)
-                    .json({ status: "err", message: "Password must be equal" });
+                    .status(400)
+                    .json({ message: "Password must be equal" });
             }
             const result = await userService.create(req.body);
             res.status(200).json(result);
@@ -311,8 +304,7 @@ class userController {
             const { name, address, avatar, dateOfBirth, gender, phone } =
                 req.body;
             if (!userId) {
-                return res.status(200).json({
-                    status: "OK",
+                return res.status(400).json({
                     message: "User id is required",
                 });
             }
@@ -328,7 +320,6 @@ class userController {
                 }).length > 0
             ) {
                 return res.status(400).json({
-                    status: "OK",
                     message: "Invalid update fields!",
                 });
             }
@@ -395,8 +386,7 @@ class userController {
         try {
             const userId = req.params.id;
             if (!userId) {
-                return res.status(200).json({
-                    status: "OK",
+                return res.status(400).json({
                     message: "User id is required",
                 });
             }
@@ -414,8 +404,7 @@ class userController {
         try {
             const userIds = req.body._id;
             if (!userIds) {
-                return res.status(200).json({
-                    status: "OK",
+                return res.status(400).json({
                     message: "User ids is required",
                 });
             }

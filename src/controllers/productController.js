@@ -93,7 +93,6 @@ class productController {
                 !userId
             ) {
                 return res.status(400).json({
-                    status: "err",
                     message: "You need to fill all field required",
                 });
             }
@@ -112,8 +111,7 @@ class productController {
             const productId = req.params.id;
             const data = req.body;
             if (!productId) {
-                return res.status(200).json({
-                    status: "OK",
+                return res.status(400).json({
                     message: "Product id is required",
                 });
             }
@@ -132,8 +130,7 @@ class productController {
         try {
             const productId = req.params.id;
             if (!productId) {
-                return res.status(200).json({
-                    status: "OK",
+                return res.status(400).json({
                     message: "Product id is required",
                 });
             }
@@ -153,7 +150,6 @@ class productController {
             const productId = req.params.id;
             if (!productId) {
                 return res.status(400).json({
-                    status: "OK",
                     message: "Product id is required",
                 });
             }
@@ -173,7 +169,6 @@ class productController {
             const ids = req.body._id;
             if (!ids) {
                 return res.status(400).json({
-                    status: "err",
                     message: "Product ids is required",
                 });
             }
@@ -193,7 +188,6 @@ class productController {
 
             if (!id) {
                 return res.status(400).json({
-                    status: "err",
                     message: "Product id is required",
                 });
             }
@@ -214,7 +208,6 @@ class productController {
 
             if (!id) {
                 return res.status(400).json({
-                    status: "err",
                     message: "Product id is required",
                 });
             }

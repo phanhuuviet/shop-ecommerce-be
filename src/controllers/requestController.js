@@ -31,7 +31,6 @@ class requestController {
             const { userId } = req;
             if (!userId) {
                 return res.status(401).json({
-                    status: "err",
                     message: "User id is required",
                 });
             } else {
@@ -54,7 +53,6 @@ class requestController {
             const { description } = req.body;
             if (!userId) {
                 return res.status(401).json({
-                    status: "err",
                     message: "User id is required",
                 });
             } else {
@@ -78,7 +76,6 @@ class requestController {
             const { userId } = req.body;
             if (!id) {
                 return res.status(401).json({
-                    status: "err",
                     message: "Request id is required",
                 });
             } else {
@@ -101,7 +98,6 @@ class requestController {
             const { id } = req.params;
             if (!id) {
                 return res.status(401).json({
-                    status: "err",
                     message: "Request id is required",
                 });
             } else {

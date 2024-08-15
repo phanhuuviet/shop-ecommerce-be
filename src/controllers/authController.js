@@ -7,8 +7,8 @@ class authController {
             const { email, password } = req.body;
             if (!email || !password) {
                 return res
-                    .status(200)
-                    .json({ status: "err", message: "The input is required" });
+                    .status(400)
+                    .json({ message: "The input is required" });
             } else if (
                 !String(email)
                     .toLowerCase()
@@ -16,8 +16,7 @@ class authController {
                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                     )
             ) {
-                return res.status(200).json({
-                    status: "err",
+                return res.status(400).json({
                     message: "The username must be email!",
                 });
             }

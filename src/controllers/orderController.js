@@ -7,8 +7,7 @@ class orderController {
             const orderId = req.params?.id;
 
             if (!orderId) {
-                res.status(200).json({
-                    status: "err",
+                res.status(400).json({
                     message: "Order id is required",
                 });
             } else {
@@ -69,8 +68,7 @@ class orderController {
                     !shippingPrice ||
                     !totalPrice
                 ) {
-                    return res.status(200).json({
-                        status: "err",
+                    return res.status(400).json({
                         message: "You need to fill in all required fields",
                     });
                 }
@@ -101,8 +99,7 @@ class orderController {
             const userId = req.userId;
 
             if (!orderId) {
-                res.status(200).json({
-                    status: "err",
+                res.status(400).json({
                     message: "Order id is required",
                 });
             } else {
@@ -126,8 +123,7 @@ class orderController {
             const orderId = req.params?.id;
 
             if (!orderId) {
-                res.status(200).json({
-                    status: "err",
+                res.status(400).json({
                     message: "Order id is required",
                 });
             } else {
