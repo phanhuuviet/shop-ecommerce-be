@@ -12,7 +12,7 @@ const login = (userData) => {
             });
             if (!checkUser) {
                 resolve({
-                    status: "err",
+                    statusCode: 400,
                     message: "The user is not exist",
                 });
             }
@@ -25,7 +25,7 @@ const login = (userData) => {
 
             if (!comparePassword) {
                 resolve({
-                    status: "err",
+                    statusCode: 400,
                     message: "Email or password is incorrect",
                 });
             }
@@ -43,7 +43,7 @@ const login = (userData) => {
 
             // return json
             resolve({
-                status: "OK",
+                statusCode: 200,
                 message: "successfully",
                 access_token,
                 refresh_tokens: refresh_token,

@@ -13,7 +13,7 @@ io.on("connection", (socket) => {
     // add new user
     socket.on("new-user-add", (newUserId) => {
         if (!activeUsers.some((user) => user.userId === newUserId)) {
-            activeUsers.push({
+            activeUsers?.push({
                 userId: newUserId,
                 socketId: socket.id,
             });

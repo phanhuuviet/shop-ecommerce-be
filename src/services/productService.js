@@ -310,7 +310,7 @@ const favoriteProduct = ({ id, userId }) => {
                 });
                 return;
             } else {
-                checkUser.favoriteProduct.push(id);
+                checkUser.favoriteProduct?.push(id);
                 await checkUser.save();
             }
             resolve({

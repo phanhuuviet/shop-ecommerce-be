@@ -6,9 +6,10 @@ class authController {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
-                return res
-                    .status(400)
-                    .json({ message: "The input is required" });
+                return res.status(400).json({
+                    statusCode: 400,
+                    message: "The input is required",
+                });
             } else if (
                 !String(email)
                     .toLowerCase()
@@ -17,6 +18,7 @@ class authController {
                     )
             ) {
                 return res.status(400).json({
+                    statusCode: 400,
                     message: "The username must be email!",
                 });
             }

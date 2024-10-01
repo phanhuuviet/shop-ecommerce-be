@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const Order = require("../models/OrderProductModel");
 const Product = require("../models/ProductModel");
 const Cart = require("../models/CartModel");
+const User = require("../models/UserModel");
+const { ROLE_ADMIN } = require("../constants/role");
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
@@ -122,26 +124,42 @@ const paidOrder = ({ orderId, userId }) => {
     return new Promise(async (resolve, reject) => {
         try {
             const data = await Order.findOne({ _id: orderId, user: userId });
+
             if (!data) {
-                resolve({
+                return resolve({
                     status: "OK",
-                    message: "Order is not exist",
-                });
-            } else {
-                const res = await Order.findByIdAndUpdate(
-                    orderId,
-                    {
-                        isPaid: true,
-                        isDelivered: true,
-                    },
-                    { new: true }
-                );
-                resolve({
-                    status: "OK",
-                    message: "Paid for order success",
-                    data: res,
+                    message: "Order does not exist",
                 });
             }
+
+            if (data.shopId) {
+                const totalPrice = +data.totalPrice;
+                const shopUpdate = User.findByIdAndUpdate(data.shopId, {
+                    $inc: { totalMoney: totalPrice * 0.95 },
+                });
+
+                const adminUpdate = User.updateMany(
+                    { role: ROLE_ADMIN },
+                    { $inc: { floorMoney: totalPrice * 0.05 } }
+                );
+
+                await Promise.all([shopUpdate, adminUpdate]);
+            }
+
+            const updatedOrder = await Order.findByIdAndUpdate(
+                orderId,
+                {
+                    isPaid: true,
+                    isDelivered: true,
+                },
+                { new: true }
+            );
+
+            resolve({
+                status: "OK",
+                message: "Paid for order successfully",
+                data: updatedOrder,
+            });
         } catch (error) {
             reject(error);
         }

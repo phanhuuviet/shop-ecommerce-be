@@ -30,6 +30,16 @@ const userSchema = new mongoose.Schema(
                 ref: "Product",
             },
         ],
+        totalMoney: {
+            type: Number,
+            default: 0,
+            required: () => this.role >= 2,
+        },
+        floorMoney: {
+            type: Number,
+            default: 0,
+            required: () => this.role === 3,
+        },
     },
     {
         timestamps: true,

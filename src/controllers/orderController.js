@@ -25,29 +25,6 @@ class orderController {
     // [POST] /order/create
     async createOrder(req, res, next) {
         try {
-            // const {
-            //     fullName,
-            //     address,
-            //     phone,
-            //     paymentMethod,
-            //     itemsPrice,
-            //     shippingPrice,
-            //     totalPrice,
-            // } = req.body;
-            // if (
-            //     !fullName ||
-            //     !address ||
-            //     !phone ||
-            //     !paymentMethod ||
-            //     !itemsPrice ||
-            //     !shippingPrice ||
-            //     !totalPrice
-            // ) {
-            //     return res.status(200).json({
-            //         status: "err",
-            //         message: "You need to fill in all required fields",
-            //     });
-            // }
             const order = req.body;
             order?.forEach((orderItem) => {
                 const {
@@ -74,9 +51,6 @@ class orderController {
                 }
             });
 
-            // const response = order.map(
-            //     async (orderItem) => await orderService.createOrder(orderItem)
-            // );
             const responses = await Promise.all(
                 order.map(async (orderItem) => {
                     const response = await orderService.createOrder(orderItem);
@@ -97,6 +71,8 @@ class orderController {
         try {
             const orderId = req.params?.id;
             const userId = req.userId;
+            console.log("orderId", orderId);
+            console.log("userId", userId);
 
             if (!orderId) {
                 res.status(400).json({
