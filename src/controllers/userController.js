@@ -50,6 +50,7 @@ class userController {
             const userId = req.userId;
             if (!userId) {
                 return res.status(401).json({
+                    statusCode: 401,
                     message: "User id is required",
                 });
             }

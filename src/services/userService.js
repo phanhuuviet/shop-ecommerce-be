@@ -85,13 +85,15 @@ const getMe = (id) => {
             const checkUser = await User.findById(id);
             if (!checkUser) {
                 resolve({
-                    status: "err",
+                    statusC: "err",
+                    statusCode: 404,
                     message: "User is not exist",
                 });
             }
 
             resolve({
                 status: "OK",
+                statusCode: 200,
                 message: "FIND USER SUCCESS",
                 data: checkUser,
             });
