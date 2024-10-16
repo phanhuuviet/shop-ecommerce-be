@@ -44,6 +44,8 @@ mongoose
         console.log(err);
     });
 
+require("./cronjob");
+
 // mongoose
 //     .connect("mongodb://localhost:27017/shop-ecommerce")
 //     .then(() => {
