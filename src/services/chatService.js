@@ -17,6 +17,7 @@ const createChat = ({ senderId, receiverId }) => {
             }
             const newChat = await Chat.create({
                 members: [senderId, receiverId],
+                friendId: senderId,
             });
             resolve({
                 status: "OK",

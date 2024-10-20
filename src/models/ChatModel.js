@@ -5,6 +5,7 @@ const chatSchema = new mongoose.Schema(
         members: {
             type: Array,
         },
+        friendId: { type: mongoose.Schema.Types.ObjectId, required: true },
     },
     {
         timestamps: true,
