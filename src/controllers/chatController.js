@@ -65,6 +65,26 @@ class chatController {
             });
         }
     }
+
+    async getMessages(req, res, next) {
+        try {
+            const chatId = req.params.chatId;
+            if (!chatId) {
+                return res.status(400).json({
+                    message: "ChatId is required",
+                });
+            } else {
+                const response = await chatService.getMessages({
+                    chatId,
+                });
+                return res.status(200).json(response);
+            }
+        } catch (error) {
+            return res.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
 }
 
 module.exports = new chatController();

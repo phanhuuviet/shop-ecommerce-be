@@ -80,8 +80,35 @@ const findChat = ({ firstId, secondId }) => {
     });
 };
 
+const getMessages = ({ chatId }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const messages = await Message.find({
+                chatId,
+            });
+            console.log("messages", messages);
+
+            const formattedMessages = messages.map((message) => {
+                return {
+                    isUser: !message.senderId?.toString().includes("bot2vn"),
+                    content: message.text,
+                    createdAt: message.createdAt,
+                };
+            });
+            resolve({
+                statusCode: 200,
+                message: "successfully",
+                data: formattedMessages,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 module.exports = {
     createChat,
     userChats,
     findChat,
+    getMessages,
 };
