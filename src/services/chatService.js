@@ -5,8 +5,9 @@ const createChat = ({ senderId, receiverId }) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkChat = await Chat.findOne({
-                members: [senderId, receiverId],
+                members: { $all: [senderId, receiverId] },
             });
+
             if (checkChat) {
                 resolve({
                     status: "OK",
