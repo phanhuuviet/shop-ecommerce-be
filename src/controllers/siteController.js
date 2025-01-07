@@ -19,6 +19,13 @@ class siteController {
             });
         }
     }
+
+    async decodedPayload(req, res, next) {
+        return res.status(200).json({
+            message: "Decoded payload successfully",
+            data: req.body,
+        });
+    }
 }
 
 module.exports = new siteController();

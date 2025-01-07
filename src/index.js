@@ -7,6 +7,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const io = require("./socket/index");
 const http = require("http");
+const { skipMiddleware } = require("./middlewares/skipMiddleware");
+const { encodedResponseMiddleware } = require("./middlewares/encodeResponse");
 
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +21,7 @@ app.use((req, res, next) => {
     res.header(`Access-Control-Allow-Headers`, `Content-Type`);
     next();
 });
+app.use(skipMiddleware(encodedResponseMiddleware, ["/decoded"]));
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use(
     bodyParser.urlencoded({
