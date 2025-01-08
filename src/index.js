@@ -9,10 +9,24 @@ const io = require("./socket/index");
 const http = require("http");
 const { skipMiddleware } = require("./middlewares/skipMiddleware");
 const { encodedResponseMiddleware } = require("./middlewares/encodeResponse");
+const { default: rateLimit } = require("express-rate-limit");
 
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3001;
+
+// Rate Limiting Middleware
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message:
+        "Too many requests from this IP, please try again after 15 minutes.",
+    standardHeaders: true, // Include rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply rate limiter to all requests
+app.use(limiter);
 
 app.use(cors());
 app.use((req, res, next) => {
