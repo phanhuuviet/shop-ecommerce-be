@@ -54,6 +54,35 @@ const login = (userData) => {
     });
 };
 
+const login_noSqlInjection = (email, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(email, password);
+            // Check exist user in database
+            const user = await User.find({
+                email,
+                password,
+            });
+            console.log(user);
+
+            if (user.length === 0) {
+                resolve({
+                    statusCode: 400,
+                    message: "The user is not exist",
+                });
+            }
+            resolve({
+                statusCode: 200,
+                message: "successfully",
+                user,
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
 module.exports = {
     login,
+    login_noSqlInjection,
 };
