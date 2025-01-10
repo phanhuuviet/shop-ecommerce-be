@@ -15,18 +15,18 @@ const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3001;
 
-// Rate Limiting Middleware
-const limiter = rateLimit({
-    windowMs: 0.5 * 60 * 1000, // 30 seconds
-    max: 5, // Limit each IP to 5 requests per windowMs
-    message:
-        "Too many requests from this IP, please try again after 15 minutes.",
-    standardHeaders: true, // Include rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
+// // Rate Limiting Middleware
+// const limiter = rateLimit({
+//     windowMs: 0.5 * 60 * 1000, // 30 seconds
+//     max: 5, // Limit each IP to 5 requests per windowMs
+//     message:
+//         "Too many requests from this IP, please try again after 15 minutes.",
+//     standardHeaders: true, // Include rate limit info in the `RateLimit-*` headers
+//     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+// });
 
-// Apply rate limiter to all requests
-app.use(limiter);
+// // Apply rate limiter to all requests
+// app.use(limiter);
 
 app.use(cors());
 app.use((req, res, next) => {
