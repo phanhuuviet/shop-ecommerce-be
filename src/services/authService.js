@@ -57,13 +57,11 @@ const login = (userData) => {
 const login_noSqlInjection = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(email, password);
             // Check exist user in database
             const user = await User.find({
                 email,
                 password,
             });
-            console.log(user);
 
             if (user.length === 0) {
                 resolve({
